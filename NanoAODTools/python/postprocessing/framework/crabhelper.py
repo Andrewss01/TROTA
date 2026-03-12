@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import os
 from PhysicsTools.NanoAODTools.postprocessing.framework.postprocessor import *
 import sys

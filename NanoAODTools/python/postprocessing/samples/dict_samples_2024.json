@@ -1,0 +1,552 @@
+{
+  "QCD_2024": {
+    "QCD_HT40to70_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT40to70_2024/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT40to70_2024/tree_hadd_1.root"
+      ],
+      "ntot": [
+        628833,
+        624884
+      ]
+    },
+    "QCD_HT70to100_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT70to100_2024/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT70to100_2024/tree_hadd_1.root"
+      ],
+      "ntot": [
+        585293,
+        652213
+      ]
+    },
+    "QCD_HT100to200_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT100to200_2024/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT100to200_2024/tree_hadd_1.root"
+      ],
+      "ntot": [
+        439193,
+        460978
+      ]
+    },
+    "QCD_HT200to400_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT200to400_2024/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT200to400_2024/tree_hadd_1.root"
+      ],
+      "ntot": [
+        424706,
+        436713
+      ]
+    },
+    "QCD_HT400to600_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT400to600_2024/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT400to600_2024/tree_hadd_1.root"
+      ],
+      "ntot": [
+        438967,
+        428614
+      ]
+    },
+    "QCD_HT600to800_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT600to800_2024/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT600to800_2024/tree_hadd_1.root"
+      ],
+      "ntot": [
+        172677,
+        216424
+      ]
+    },
+    "QCD_HT800to1000_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT800to1000_2024/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT800to1000_2024/tree_hadd_1.root"
+      ],
+      "ntot": [
+        434232,
+        432230
+      ]
+    },
+    "QCD_HT1000to1200_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT1000to1200_2024/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT1000to1200_2024/tree_hadd_1.root"
+      ],
+      "ntot": [
+        431604,
+        437231
+      ]
+    },
+    "QCD_HT1200to1500_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT1200to1500_2024/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT1200to1500_2024/tree_hadd_1.root"
+      ],
+      "ntot": [
+        259487,
+        194085
+      ]
+    },
+    "QCD_HT1500to2000_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT1500to2000_2024/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT1500to2000_2024/tree_hadd_1.root"
+      ],
+      "ntot": [
+        217115,
+        207625
+      ]
+    },
+    "QCD_HT2000_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT2000_2024/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT2000_2024/tree_hadd_1.root"
+      ],
+      "ntot": [
+        219245,
+        219440
+      ]
+    }
+  },
+  "QCD_HT40to70_2024": {
+    "QCD_HT40to70_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT40to70_2024/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT40to70_2024/tree_hadd_1.root"
+      ],
+      "ntot": [
+        628833,
+        624884
+      ]
+    }
+  },
+  "QCD_HT70to100_2024": {
+    "QCD_HT70to100_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT70to100_2024/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT70to100_2024/tree_hadd_1.root"
+      ],
+      "ntot": [
+        585293,
+        652213
+      ]
+    }
+  },
+  "QCD_HT100to200_2024": {
+    "QCD_HT100to200_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT100to200_2024/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT100to200_2024/tree_hadd_1.root"
+      ],
+      "ntot": [
+        439193,
+        460978
+      ]
+    }
+  },
+  "QCD_HT200to400_2024": {
+    "QCD_HT200to400_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT200to400_2024/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT200to400_2024/tree_hadd_1.root"
+      ],
+      "ntot": [
+        424706,
+        436713
+      ]
+    }
+  },
+  "QCD_HT400to600_2024": {
+    "QCD_HT400to600_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT400to600_2024/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT400to600_2024/tree_hadd_1.root"
+      ],
+      "ntot": [
+        438967,
+        428614
+      ]
+    }
+  },
+  "QCD_HT600to800_2024": {
+    "QCD_HT600to800_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT600to800_2024/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT600to800_2024/tree_hadd_1.root"
+      ],
+      "ntot": [
+        172677,
+        216424
+      ]
+    }
+  },
+  "QCD_HT800to1000_2024": {
+    "QCD_HT800to1000_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT800to1000_2024/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT800to1000_2024/tree_hadd_1.root"
+      ],
+      "ntot": [
+        434232,
+        432230
+      ]
+    }
+  },
+  "QCD_HT1000to1200_2024": {
+    "QCD_HT1000to1200_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT1000to1200_2024/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT1000to1200_2024/tree_hadd_1.root"
+      ],
+      "ntot": [
+        431604,
+        437231
+      ]
+    }
+  },
+  "QCD_HT1200to1500_2024": {
+    "QCD_HT1200to1500_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT1200to1500_2024/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT1200to1500_2024/tree_hadd_1.root"
+      ],
+      "ntot": [
+        259487,
+        194085
+      ]
+    }
+  },
+  "QCD_HT1500to2000_2024": {
+    "QCD_HT1500to2000_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT1500to2000_2024/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT1500to2000_2024/tree_hadd_1.root"
+      ],
+      "ntot": [
+        217115,
+        207625
+      ]
+    }
+  },
+  "QCD_HT2000_2024": {
+    "QCD_HT2000_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT2000_2024/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/QCD_HT2000_2024/tree_hadd_1.root"
+      ],
+      "ntot": [
+        219245,
+        219440
+      ]
+    }
+  },
+  "ZJetsToNuNu_2024": {
+    "ZJetsToNuNu_HT100to200_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/ZJetsToNuNu_HT100to200_2024/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/ZJetsToNuNu_HT100to200_2024/tree_hadd_1.root"
+      ],
+      "ntot": [
+        368937,
+        406417
+      ]
+    },
+    "ZJetsToNuNu_HT200to400_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/ZJetsToNuNu_HT200to400_2024/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/ZJetsToNuNu_HT200to400_2024/tree_hadd_1.root"
+      ],
+      "ntot": [
+        438495,
+        423045
+      ]
+    },
+    "ZJetsToNuNu_HT400to800_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/ZJetsToNuNu_HT400to800_2024/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/ZJetsToNuNu_HT400to800_2024/tree_hadd_1.root"
+      ],
+      "ntot": [
+        440436,
+        437603
+      ]
+    },
+    "ZJetsToNuNu_HT800to1500_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/ZJetsToNuNu_HT800to1500_2024/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/ZJetsToNuNu_HT800to1500_2024/tree_hadd_1.root"
+      ],
+      "ntot": [
+        310198,
+        378353
+      ]
+    },
+    "ZJetsToNuNu_HT1500to2500_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/ZJetsToNuNu_HT1500to2500_2024/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/ZJetsToNuNu_HT1500to2500_2024/tree_hadd_1.root"
+      ],
+      "ntot": [
+        212935,
+        22021
+      ]
+    },
+    "ZJetsToNuNu_HT2500_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/ZJetsToNuNu_HT2500_2024/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/ZJetsToNuNu_HT2500_2024/tree_hadd_1.root"
+      ],
+      "ntot": [
+        218847,
+        219437
+      ]
+    }
+  },
+  "ZJetsToNuNu_HT100to200_2024": {
+    "ZJetsToNuNu_HT100to200_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/ZJetsToNuNu_HT100to200_2024/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/ZJetsToNuNu_HT100to200_2024/tree_hadd_1.root"
+      ],
+      "ntot": [
+        368937,
+        406417
+      ]
+    }
+  },
+  "ZJetsToNuNu_HT200to400_2024": {
+    "ZJetsToNuNu_HT200to400_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/ZJetsToNuNu_HT200to400_2024/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/ZJetsToNuNu_HT200to400_2024/tree_hadd_1.root"
+      ],
+      "ntot": [
+        438495,
+        423045
+      ]
+    }
+  },
+  "ZJetsToNuNu_HT400to800_2024": {
+    "ZJetsToNuNu_HT400to800_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/ZJetsToNuNu_HT400to800_2024/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/ZJetsToNuNu_HT400to800_2024/tree_hadd_1.root"
+      ],
+      "ntot": [
+        440436,
+        437603
+      ]
+    }
+  },
+  "ZJetsToNuNu_HT800to1500_2024": {
+    "ZJetsToNuNu_HT800to1500_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/ZJetsToNuNu_HT800to1500_2024/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/ZJetsToNuNu_HT800to1500_2024/tree_hadd_1.root"
+      ],
+      "ntot": [
+        310198,
+        378353
+      ]
+    }
+  },
+  "ZJetsToNuNu_HT1500to2500_2024": {
+    "ZJetsToNuNu_HT1500to2500_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/ZJetsToNuNu_HT1500to2500_2024/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/ZJetsToNuNu_HT1500to2500_2024/tree_hadd_1.root"
+      ],
+      "ntot": [
+        212935,
+        22021
+      ]
+    }
+  },
+  "ZJetsToNuNu_HT2500_2024": {
+    "ZJetsToNuNu_HT2500_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/ZJetsToNuNu_HT2500_2024/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/ZJetsToNuNu_HT2500_2024/tree_hadd_1.root"
+      ],
+      "ntot": [
+        218847,
+        219437
+      ]
+    }
+  },
+  "TT_2024": {
+    "TT_semilep_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/TT_semilep_2024/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/TT_semilep_2024/tree_hadd_1.root"
+      ],
+      "ntot": [
+        428934,
+        442200
+      ]
+    },
+    "TT_hadr_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/TT_hadr_2024/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/TT_hadr_2024/tree_hadd_1.root"
+      ],
+      "ntot": [
+        442200,
+        442200
+      ]
+    },
+    "TT_dilep_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/TT_dilep_2024/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/TT_dilep_2024/tree_hadd_1.root"
+      ],
+      "ntot": [
+        432100,
+        432100
+      ]
+    }
+  },
+  "TT_semilep_2024": {
+    "TT_semilep_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/TT_semilep_2024/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/TT_semilep_2024/tree_hadd_1.root"
+      ],
+      "ntot": [
+        428934,
+        442200
+      ]
+    }
+  },
+  "TT_hadr_2024": {
+    "TT_hadr_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/TT_hadr_2024/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/TT_hadr_2024/tree_hadd_1.root"
+      ],
+      "ntot": [
+        442200,
+        442200
+      ]
+    }
+  },
+  "TT_dilep_2024": {
+    "TT_dilep_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/TT_dilep_2024/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA_2024/PostProcessed_samples/TT_dilep_2024/tree_hadd_1.root"
+      ],
+      "ntot": [
+        432100,
+        432100
+      ]
+    }
+  },
+  "TW_2024": {
+    "Top_W_minus_2L2Nu_2024": {
+      "strings": [],
+      "ntot": []
+    },
+    "Top_W_minus_4Q_2024": {
+      "strings": [],
+      "ntot": []
+    },
+    "Top_W_minus_LNu2Q_2024": {
+      "strings": [],
+      "ntot": []
+    },
+    "Top_W_plus_2L2Nu_2024": {
+      "strings": [],
+      "ntot": []
+    },
+    "Top_W_plus_4Q_2024": {
+      "strings": [],
+      "ntot": []
+    },
+    "Top_W_plus_LNu2Q_2024": {
+      "strings": [],
+      "ntot": []
+    }
+  },
+  "Top_W_minus_2L2Nu_2024": {
+    "Top_W_minus_2L2Nu_2024": {
+      "strings": [],
+      "ntot": []
+    }
+  },
+  "Top_W_minus_4Q_2024": {
+    "Top_W_minus_4Q_2024": {
+      "strings": [],
+      "ntot": []
+    }
+  },
+  "Top_W_minus_LNu2Q_2024": {
+    "Top_W_minus_LNu2Q_2024": {
+      "strings": [],
+      "ntot": []
+    }
+  },
+  "Top_W_plus_2L2Nu_2024": {
+    "Top_W_plus_2L2Nu_2024": {
+      "strings": [],
+      "ntot": []
+    }
+  },
+  "Top_W_plus_4Q_2024": {
+    "Top_W_plus_4Q_2024": {
+      "strings": [],
+      "ntot": []
+    }
+  },
+  "Top_W_plus_LNu2Q_2024": {
+    "Top_W_plus_LNu2Q_2024": {
+      "strings": [],
+      "ntot": []
+    }
+  },
+  "WtoLNu_4Jets_2024": {
+    "WtoLNu_4Jets_1J_2024": {
+      "strings": [],
+      "ntot": []
+    },
+    "WtoLNu_4Jets_2J_2024": {
+      "strings": [],
+      "ntot": []
+    },
+    "WtoLNu_4Jets_3J_2024": {
+      "strings": [],
+      "ntot": []
+    },
+    "WtoLNu_4Jets_4J_2024": {
+      "strings": [],
+      "ntot": []
+    }
+  },
+  "WtoLNu_4Jets_1J_2024": {
+    "WtoLNu_4Jets_1J_2024": {
+      "strings": [],
+      "ntot": []
+    }
+  },
+  "WtoLNu_4Jets_2J_2024": {
+    "WtoLNu_4Jets_2J_2024": {
+      "strings": [],
+      "ntot": []
+    }
+  },
+  "WtoLNu_4Jets_3J_2024": {
+    "WtoLNu_4Jets_3J_2024": {
+      "strings": [],
+      "ntot": []
+    }
+  },
+  "WtoLNu_4Jets_4J_2024": {
+    "WtoLNu_4Jets_4J_2024": {
+      "strings": [],
+      "ntot": []
+    }
+  }
+}
