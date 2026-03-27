@@ -6,7 +6,7 @@ For more information on NanoAODTools see: https://github.com/CMSNAFW/nanoAOD-too
 ```bash
 cmsrel CMSSW_X_Y_Z
 cd CMSSW_X_Y_Z/src
-git clone https://github.com/Andrewss01/TROTA.git PhysicsTools/
+git clone https://github.com/CMSNAFW/TROTA.git PhysicsTools/
 scram b -j 10
 cmsenv
 ```
