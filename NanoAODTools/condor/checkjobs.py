@@ -164,7 +164,7 @@ def check_errors_fromcondor(dataset, username, uid, remote_folder_name, redirect
     jobs_with_errors_numbers = [e.split("_")[-1].replace(".err","") for e in jobs_with_errors[:-1]]
     str_resubmit = ""
     for e in jobs_with_errors_numbers:
-        str_resubmit += f"condor_submit tmp/post_processing/{dataset}/{e}/condor.sub; "
+        str_resubmit += f"condor_submit tmp/post_processing/{dataset}/file_{e}/condor.sub; "
     if not resubmit:
         print(f"Found {len(jobs_with_errors_numbers)} jobs with Davix errors in dataset {dataset}. To resubmit them, run:\n{str_resubmit}")
     else:
