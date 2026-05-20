@@ -1,7 +1,7 @@
 # to run from lxplus9
 import ROOT, os
 import subprocess
-from PhysicsTools.NanoAODTools.postprocessing.samples.samples_with_PF import *
+from PhysicsTools.NanoAODTools.postprocessing.samples.samples import *
 import optparse
 import json
 from tqdm import tqdm
@@ -12,7 +12,7 @@ from checkjobs import get_file_sizes, find_folder, job_exit_code, checkSubmitSta
 usage = 'python3 getoutputs.py -d dataset_name'
 parser = optparse.OptionParser(usage)
 parser.add_option('-d', '--dat', dest='dat', type=str, default = '', help='Please enter a dataset name')
-parser.add_option('-o', '--output', dest='output', type=str, default = '../python/postprocessing/samples/dict_samples.json', help='Please enter a json output file')
+parser.add_option('-o', '--output', dest='output', type=str, default = '../python/postprocessing/samples/dict_samples_2022.json', help='Please enter a json output file')
 parser.add_option('--tier', dest='tier', type=str, default = 'bari', help='Please enter location where to write the output file (tier pisa or bari)')
 
 (opt, args) = parser.parse_args()
@@ -40,8 +40,8 @@ if not os.path.exists("/tmp/x509up_u" + str(uid)):
 os.popen("cp /tmp/x509up_u" + str(uid) + " /afs/cern.ch/user/" + inituser + "/" + username + "/private/x509up")
 
 # insert here the name of output folder
-running_folder                      = os.environ.get('PWD') + "/tmp/"
-remote_folder_name                  = "Run3Analysis_Tprime/PostProcessed_samples"
+running_folder                      = os.environ.get('PWD') + "/tmp/post_processing/"
+remote_folder_name                  = "TROTA2022/Training_samples"
 
 def get_files_on_tier(folder, cert_path, ca_path):
     try:
@@ -110,7 +110,10 @@ else:
 
 for sample in samples:
     print("---------- Running dataset: ", dataset)
-    out_dict[sample.process][sample.label] = {}
+    if hasattr(sample, "process"):
+        out_dict[sample.process][sample.label] = {}
+    else:
+        out_dict[sample.label][sample.label] = {}
 
     if dataset!=sample.label: 
         out_dict[sample.label] = {}
@@ -122,20 +125,20 @@ for sample in samples:
     files_strings   = get_files_on_tier(folder, "/tmp/x509up_u"+str(uid), "/cvmfs/cms.cern.ch/grid/etc/grid-security/certificates/")
     
     file_sizes      = get_file_sizes(folder, "/tmp/x509up_u"+str(uid), "/cvmfs/cms.cern.ch/grid/etc/grid-security/certificates/")
-    # files_strings   = []
+    files_strings   = []
 
-    # jobs_total, total_on_tier, to_resubmit, not_found, empty, jobs_toResubmit_notFoundOnTier, jobs_toResubmit_emptyFile = checkSubmitStatus(redirector, username, uid, sample, running_folder, remote_folder_name)
-    # for file_name, file_size in file_sizes.items():
-    #     jobNumber        = int(file_name.split("_")[-1].split(".")[0])
-    #     if jobNumber in jobs_toResubmit_emptyFile:
-    #         job_logFile      = "/afs/cern.ch/user/" + inituser + "/" + username + "/TprimeAnalysis/NanoAODTools/condor/tmp/" + sample.label + "/condor/log/" + sample.label + "_file" + str(jobNumber) + ".log"
-    #         job_errFile      = "/afs/cern.ch/user/" + inituser + "/" + username + "/TprimeAnalysis/NanoAODTools/condor/tmp/" + sample.label + "/condor/error/" + sample.label + "_file" + str(jobNumber) + ".err"
-    #         print(f"Excluding File: {file_name}, Size: {file_size} bytes")
-    #         print(f"\t\tcheck the log file: {job_logFile}")
-    #         print(f"\t\tcheck the err file: {job_errFile}")
-    #         continue
-    #     else:
-    #         files_strings.append(file_name)
+    jobs_total, total_on_tier, to_resubmit, not_found, empty, jobs_toResubmit_notFoundOnTier, jobs_toResubmit_emptyFile = checkSubmitStatus(redirector, username, uid, sample, running_folder, remote_folder_name)
+    for file_name, file_size in file_sizes.items():
+        jobNumber        = int(file_name.split("_")[-1].split(".")[0])
+        if jobNumber in jobs_toResubmit_emptyFile:
+            job_logFile      = "/afs/cern.ch/user/" + inituser + "/" + username + "/TprimeAnalysis/NanoAODTools/condor/tmp/" + sample.label + "/condor/log/" + sample.label + "_file" + str(jobNumber) + ".log"
+            job_errFile      = "/afs/cern.ch/user/" + inituser + "/" + username + "/TprimeAnalysis/NanoAODTools/condor/tmp/" + sample.label + "/condor/error/" + sample.label + "_file" + str(jobNumber) + ".err"
+            print(f"Excluding File: {file_name}, Size: {file_size} bytes")
+            print(f"\t\tcheck the log file: {job_logFile}")
+            print(f"\t\tcheck the err file: {job_errFile}")
+            continue
+        else:
+            files_strings.append(file_name)
     
    
     path_file = folder
@@ -152,19 +155,19 @@ for sample in samples:
                 dir_ = rootfile.Get("plots")
                 h_genweight = dir_.Get("h_genweight")
                 # runstree = rootfile.Get("Runs")
-                n_toh_genweight.GetBinContent(0)
+                n = int(h_genweight.GetBinContent(1))
                 # runstree.GetEntry(0)
                 # geneventSumw = runstree.genEventSumw
                 # tree = rootfile.Get("Events")
                 # tree.GetEntry(0)
                 # eventweight = abs(tree.Generator_weight)
                 # n = round(abs(geneventSumw/eventweight))
-                # ntot.append(n)
+                ntot.append(n)
             except:
                 print("Could not open file: ", f)
                 # n = rootfile.Get('Events').GetEntries()
-                n = None
-                ntot.append(n)
+                # n = None
+                ntot.append(None)
                 continue
             # histo = rootfile.Get("plots/h_genweight")
             # ntot.append(histo.GetBinContent(2))
@@ -172,26 +175,37 @@ for sample in samples:
             try:
                 rootfile = ROOT.TFile.Open(f)
                 out_strings.append(f)
-                runstree = rootfile.Get("Runs")
-                runstree.GetEntry(0)
-                geneventSumw = runstree.genEventSumw
-                tree = rootfile.Get("Events")
-                tree.GetEntry(0)
-                eventweight = abs(tree.Generator_weight)
-                n = round(abs(geneventSumw/eventweight))
+                dir_ = rootfile.Get("plots")
+                h_genweight = dir_.Get("h_genweight")
+                n = int(h_genweight.GetBinContent(1))
+                # print('n is: ', n)
+                # runstree = rootfile.Get("Runs")
+                # runstree.GetEntry(0)
+                # geneventSumw = runstree.genEventSumw
+                # tree = rootfile.Get("Events")
+                # tree.GetEntry(0)
+                # eventweight = abs(tree.Generator_weight)
+                # n = round(abs(geneventSumw/eventweight))
                 ntot.append(n)
             except:
                 print("Could not open file: ", f)
                 ntot.append(None)
                 continue
-    out_dict[sample.process][sample.label] = {'strings': out_strings, "ntot": ntot}
-    json_out[sample.process][sample.label] = out_dict[sample.process][sample.label]
+    if hasattr(sample, "process"):
+        out_dict[sample.process][sample.label] = {'strings': out_strings, "ntot": ntot}
+        json_out[sample.process][sample.label] = out_dict[sample.process][sample.label]
+    else:
+        out_dict[sample.label][sample.label] = {'strings': out_strings, "ntot": ntot}
+        json_out[sample.label][sample.label] = out_dict[sample.label][sample.label]
+
     if json_out.get(sample.label) is None:
         json_out[sample.label] = {}
-    json_out[sample.label][sample.label] = out_dict[sample.process][sample.label]
+    if hasattr(sample, "process"):
+        json_out[sample.label][sample.label] = out_dict[sample.process][sample.label]
+    
     print(f"Sample {sample.label} done!")
     print("-----------------------------------------------------")
-    print(out_dict[sample.process][sample.label])
+    # print(out_dict[sample.process][sample.label])
     # print(out_dict.keys())
     # print("-----")
     # print(json_out.keys())

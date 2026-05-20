@@ -12,3 +12,5 @@ NanoAODTools/python/postprocessing/TROTA2024/trainings/
 NanoAODTools/python/postprocessing/TROTA2022/trainings/
 tmp/
 NanoAODTools/condor/tmp/
+NanoAODTools/python/postprocessing/TROTA2024/tuning/
+NanoAODTools/python/postprocessing/TROTA2022/tuning/

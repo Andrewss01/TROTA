@@ -16,7 +16,9 @@ parser.add_option('--dryrun', dest='debug', action='store_true', default=False, 
 parser.add_option('-s', '--submit', dest='submit', action='store_true', default=False, help='True if you want to submit jobs')
 parser.add_option('-e', '--evaluate', action = 'store_true', default = False, help='True if you want to evaluate with the training models')
 parser.add_option('--status', action='store_true', default=False, help='True if you want to check status of jobs')
-parser.add_option('--folder', dest='folder', default='TROTA2024/Eval_samples', help = 'choose the folder name on you tier where the files will be saved')
+parser.add_option('--folder', dest='folder', default='TROTA2024/Training_samples', help = 'choose the folder name on you tier where the files will be saved')
+parser.add_option('--nfiles', dest='nfiles', type=int, default=5, help = 'choose the folder name on you tier where the files will be saved')
+
 (opt, args) = parser.parse_args()
 debug = opt.debug 
 submit = opt.submit
@@ -24,6 +26,7 @@ tier = opt.tier
 evaluate = opt.evaluate
 status = opt.status
 tier_folder = opt.folder
+n_files = opt.nfiles
 
 
 
@@ -191,6 +194,8 @@ if submit:
             
             if debug: files_list = files_list[:1]
             print('numer total files: ', len(files_list))
+            if len(files_list)>=n_files:
+                files_list = files_list[:n_files]
             for idx, file in enumerate(files_list):
                 print("...submitting file ", idx, end = '\r')
                 label = 'file_'+str(idx)
@@ -240,6 +245,9 @@ if status:
             if file_size <1000:
                 # print(f"File: {file_name}, Size: {file_size} bytes")
                 job_failed += 1
+            elif not os.path.exists(running_folder+"/"+sample.label+"/condor/error/file_"+str(file_num)+".err"):
+                job_running +=1
+                # print('job running: ', job_running ,' ', running_folder+"/"+sample.label+"/condor/error/"+sample.label+"_file"+str(file_num)+".err maybe on hold")
             else:
                 job_success += 1
 
@@ -250,7 +258,8 @@ if status:
         print("\033[91mJobs failed: {} ({:.2f}%)\033[0m".format(job_failed, (job_failed/jobs_total)*100))
         print("\033[92mJobs succeeded: {} ({:.2f}%)\033[0m\n".format(job_success, (job_success/jobs_total)*100))
         print("running jobs: {} ({:.2f}%)\n".format(jobs_total-(job_failed+job_success), ((jobs_total-(job_failed+job_success))/jobs_total)*100))
-        check_errors_fromcondor(sample.label, username, uid, tier_folder, redirector, resubmit=False, delete_files_fromtier=False)
+        check_errors_fromcondor(sample.label, username, uid, tier_folder, redirector, resubmit=True, delete_files_fromtier=False)
+        print('jobs running or on hold: ', job_running)
         print("\n--------------------------------------------------------------------------------")
 
 
