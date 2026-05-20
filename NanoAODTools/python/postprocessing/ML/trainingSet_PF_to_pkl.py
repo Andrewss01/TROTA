@@ -8,7 +8,7 @@ import numpy as np
 import ROOT
 from PhysicsTools.NanoAODTools.postprocessing.framework.datamodel import Collection, Object, Event, InputTree
 from PhysicsTools.NanoAODTools.postprocessing.framework.eventloop import Module
-from PhysicsTools.NanoAODTools.postprocessing.tools import *
+from PhysicsTools.NanoAODTools.postprocessing.utils.tools import *
 from PhysicsTools.NanoAODTools.postprocessing.framework.treeReaderArrayTools import *
 import pickle as pkl
 import matplotlib.pyplot as plt
@@ -30,7 +30,8 @@ parser.add_option( '--path_pkls' , dest='pathpkls' , type=str   , default=None ,
 parser.add_option( '--num_pfcs'  , dest='numpfcs'  , type=int   , default=20   ,   help='number of particles used for training, default 20')
 parser.add_option( '--pt_cut'    , dest='pt_cut'   , type=float , default= 0   ,   help='pt cut for particles used for training')
 parser.add_option('-v'   , '--verbose'   , dest='verbose'  , action='store_true'       , default=False  ,  help='if True do verbose')
-
+parser.add_option('--pfc', dest = 'pfc', action = 'store_true', default=False)
+parser.add_option('--sv', dest = 'sv', action = 'store_true', default=False)
 (opt, args) = parser.parse_args()
 
 year      = opt.year
@@ -41,6 +42,8 @@ path_pkl  = opt.pathpkls
 n_PFCs    = opt.numpfcs
 pt_cut    = opt.pt_cut
 verbose   = opt.verbose
+pfc       = opt.pfc
+sv        = opt.sv
 
 # print(verbose)
 def fill_mass(mass_dnn, idx_top, j0, j1, j2, fj):
@@ -65,7 +68,6 @@ def fill_mass(mass_dnn, idx_top, j0, j1, j2, fj):
     #     mass_dnn[idx_top, 3] = variables_cluster[1]
     #     mass_dnn[idx_top, 4] = variables_cluster[2] 
     return mass_dnn
-
 
 def fill_fj(fj_dnn, fj, idx_top):
     if year==2018: 
@@ -279,8 +281,7 @@ def fill_SVs(n_SVs, SVs_dnn, SVs, idx_top, pt_top, eta_top, phi_top, M_top):
     return SVs_dnn
 
 
-
-def main(year=year, component=component, inFilen=inFile, n_events=n_events, path_pkl=path_pkl, n_PFCs=n_PFCs, pt_cut=pt_cut, verbose=verbose):
+def main(year=year, component=component, inFilen=inFile, n_events=n_events, path_pkl=path_pkl, n_PFCs=n_PFCs, pt_cut=pt_cut, verbose=verbose, pfc=pfc, sv=sv):
     if verbose: 
         print(f"year:                         {year}"     )
         print(f"component:                    {component}")
@@ -290,6 +291,8 @@ def main(year=year, component=component, inFilen=inFile, n_events=n_events, path
         print(f"num. pfcs:                    {n_PFCs}"   )
         print(f"pt cut:                       {pt_cut}"   )
         print(f"verbose:                      {verbose}"  )
+        print(f"pfc:                      {pfc}"  )
+        print(f"sv:                      {sv}"  )
 
     rfile = ROOT.TFile.Open(inFile)
     tree  = InputTree(rfile.Get("Events"))
@@ -321,7 +324,7 @@ def main(year=year, component=component, inFilen=inFile, n_events=n_events, path
         print(f"batch: {batches}")
 
     with mp.Pool(num_workers) as pool:
-        batch_outputs = pool.starmap(process_batch, [(batch, inFile, component, categories, n_PFCs, year, pt_cut, verbose) for batch in batches])
+        batch_outputs = pool.starmap(process_batch, [(batch, inFile, component, categories, n_PFCs, year, pt_cut, verbose, pfc, sv) for batch in batches])
     
     # print('batch outputs is: ', batch_outputs)
     init = batch_outputs[0]
@@ -344,15 +347,16 @@ def merge_batch_output(output, batch_output):
     # Iterate over the components in batch_output (component is the key, categories is the dataset for that component)
     for component, categories in batch_output.items():
         #print(categories)
+        # print(categories.items())
         for cat, data_type in categories.items():
-            #print(len(data_type))
+            # print(data_type)
             for i in range(len(data_type)):
                 #print(i,data_type[i])
                 output[component][cat][i] = np.concatenate((output[component][cat][i],data_type[i]),axis=0)
 
     return output
 
-def process_batch(batch_indexes, inFile, component, categories, n_PFCs, year, pt_cut, verbose):
+def process_batch(batch_indexes, inFile, component, categories, n_PFCs, year, pt_cut, verbose, pfc, sv):
     rfile = ROOT.TFile.Open(inFile)
     tree = InputTree(rfile.Get("Events"))
     
@@ -368,12 +372,15 @@ def process_batch(batch_indexes, inFile, component, categories, n_PFCs, year, pt
             data_jets           = np.zeros((1,3,8))
             data_fatjets        = np.zeros((1,12))
             #mergia jet e fatjet e salvane sui 40 !!senza overlap e controlla l'ordinamento in pt eindice di distanza e se appatriene ejet fgj o entrambi
-            data_PFC         = np.zeros((1,n_PFCs,13)) #!! setta il masssimo delle 20 da prendere e andranno usate LSTM
-            data_SV          = np.zeros((1, n_SVs,12 ))
+            if pfc:
+                data_PFC         = np.zeros((1,n_PFCs,13)) #!! setta il masssimo delle 20 da prendere e andranno usate LSTM
+            if sv:
+                data_SV          = np.zeros((1, n_SVs,12 ))
         elif year== 2024:
             data_jets        = np.zeros((1,3,8))
             data_fatjets     = np.zeros((1, 15))
-            data_PFC         = np.zeros((1, n_PFCs, 9))
+            if pfc:
+                data_PFC         = np.zeros((1, n_PFCs, 9))
         
         data_mass  = np.zeros((1,3))
         data_label = np.zeros((1,1))
@@ -391,14 +398,14 @@ def process_batch(batch_indexes, inFile, component, categories, n_PFCs, year, pt
             tops = Collection(event, "TopMixed")
             ntops = len(tops)
             
-            if year == 2024:
+            if year == 2024 and pfc:
                 PFCands  = Collection(event, "PFCand")
                 Indexes_pfc = Collection(event, "IndexesPFC")
 
-            if year == 2022:
+            if year == 2022 and sv:
                 SV_vertexes = Collection(event, "SV")
                 Indexes_sv = Collection(event, "IndexesSV")
-
+            if year == 2022 and pfc:
                 PFCands = Collection(event, "PFCands")
                 Indexes_pfc = Collection(event, "IndexesPFC")
                 
@@ -412,7 +419,7 @@ def process_batch(batch_indexes, inFile, component, categories, n_PFCs, year, pt
             if ntops==0:
                 continue
             for top_num, t in enumerate(tops):
-                if pt_cut != 0 and t.pt <= pt_cut:
+                if t.pt <= pt_cut:
                     
                     best_top_category= topcategory(t)
 
@@ -427,15 +434,14 @@ def process_batch(batch_indexes, inFile, component, categories, n_PFCs, year, pt
                     elif year==2024:
                         jet_toappend            = np.zeros((1,3,8))
                         fatjet_toappend         = np.zeros((1,15))
-                        PFC_toappend            = np.zeros((1,n_PFCs,9))
+                        # PFC_toappend            = np.zeros((1,n_PFCs,9))
                     mass_toappend = np.zeros((1,3))
                     label_toappend = np.zeros((1,1))
                     event_category_toappend = np.zeros((1,1))
 
-                    PFCs = []
-                    pfc_indexes = []
+                    
 
-                    if year == 2022:
+                    if year == 2022 and sv:
                         SVs = []
                         sv_indexes = []
 
@@ -450,24 +456,27 @@ def process_batch(batch_indexes, inFile, component, categories, n_PFCs, year, pt
                             if vertex.Idx in idx_sv_to_append:
                                 SVs.append(vertex)
 
-                    for idx in Indexes_pfc:
-                        pfc_indexes.append(idx.idxPFC)
+                    if pfc:
+                        PFCs = []
+                        pfc_indexes = []
+                        for idx in Indexes_pfc:
+                            pfc_indexes.append(idx.idxPFC)
 
-                    start_index_pfc = pfc_indexes.index(-(top_num+1))
-                    end_index_pfc = pfc_indexes.index(-(top_num+2))
-                    idx_pfc_to_append = pfc_indexes[start_index_pfc+1:end_index_pfc]
-
-
-                    for particle in PFCands: #ciclo sulle particles
-                        if particle.Idx in idx_pfc_to_append:
-                            PFCs.append(particle)
+                        start_index_pfc = pfc_indexes.index(-(top_num+1))
+                        end_index_pfc = pfc_indexes.index(-(top_num+2))
+                        idx_pfc_to_append = pfc_indexes[start_index_pfc+1:end_index_pfc]
 
 
-                    PFC_toappend = fill_PFCs(n_PFCs= n_PFCs, PFCs_dnn = PFC_toappend, 
-                                            PFCs = PFCs, idx_top = 0, pt_top = t.pt, 
-                                            eta_top = t.eta, phi_top = t.phi, M_top = t.mass)
+                        for particle in PFCands: #ciclo sulle particles
+                            if particle.Idx in idx_pfc_to_append:
+                                PFCs.append(particle)
 
-                    if year == 2022:
+
+                        PFC_toappend = fill_PFCs(n_PFCs= n_PFCs, PFCs_dnn = PFC_toappend, 
+                                                PFCs = PFCs, idx_top = 0, pt_top = t.pt, 
+                                                eta_top = t.eta, phi_top = t.phi, M_top = t.mass)
+
+                    if year == 2022 and sv:
                         SVs_toappend = fill_SVs(n_SVs = n_SVs, SVs_dnn = SVs_toappend, 
                                                 SVs= SVs, idx_top = 0, pt_top = t.pt, 
                                                 eta_top = t.eta, phi_top = t.phi, M_top = t.mass)
@@ -522,8 +531,9 @@ def process_batch(batch_indexes, inFile, component, categories, n_PFCs, year, pt
                     #     print('data to append: ', jet_toappend)
                     data_jets         = np.append(data_jets,      jet_toappend,            axis = 0)
                     data_fatjets      = np.append(data_fatjets,   fatjet_toappend,         axis = 0)
-                    data_PFC          = np.append(data_PFC,       PFC_toappend,            axis = 0)
-                    if year == 2022:    
+                    if pfc:
+                        data_PFC          = np.append(data_PFC,       PFC_toappend,            axis = 0)
+                    if year == 2022 and sv:    
                         data_SV           = np.append(data_SV,        SVs_toappend,    axis = 0)
                     #print("data", data_mass,"\nto append", mass_toappend)
                     data_mass       = np.append(data_mass,      mass_toappend,           axis = 0)
@@ -536,8 +546,9 @@ def process_batch(batch_indexes, inFile, component, categories, n_PFCs, year, pt
                         # print('data jets is: ', data_jets)
                         data_jets = np.delete(data_jets, 0 , axis=0)
                         data_fatjets = np.delete(data_fatjets, 0 ,axis=0)
-                        data_PFC        = np.delete(data_PFC,       0, axis = 0)
-                        if year ==2022:
+                        if pfc:
+                            data_PFC        = np.delete(data_PFC,       0, axis = 0)
+                        if year ==2022 and sv:
                             data_SV         = np.delete(data_SV,        0, axis = 0)
                         data_mass       = np.delete(data_mass,      0, axis = 0)
                         data_label      = np.delete(data_label,     0, axis = 0)
@@ -555,11 +566,16 @@ def process_batch(batch_indexes, inFile, component, categories, n_PFCs, year, pt
                 n=0
             # print('n is: ', n)
             
-            if year == 2022: 
+            if pfc and sv: 
                 batch_output[component][cat] = [data_jets[event_category == n], data_fatjets[event_category == n], data_mass[event_category == n], data_label[event_category == n], data_PFC[event_category == n],  data_SV[event_category == n] ]
-            
-            else: 
+            elif pfc and not sv: 
                 batch_output[component][cat] = [data_jets[event_category == n], data_fatjets[event_category == n], data_mass[event_category == n], data_label[event_category == n], data_PFC[event_category == n]]
+            elif not pfc and sv: 
+                batch_output[component][cat] = [data_jets[event_category == n], data_fatjets[event_category == n], data_mass[event_category == n], data_label[event_category == n], data_SV[event_category == n]]
+            else: 
+                batch_output[component][cat] = [data_jets[event_category == n], data_fatjets[event_category == n], data_mass[event_category == n], data_label[event_category == n]]
+            # else: 
+            #     batch_output[component][cat] = [data_jets[event_category == n], data_fatjets[event_category == n], data_mass[event_category == n], data_label[event_category == n], data_PFC[event_category == n]]
         #     print('PROVA A:', data_jets)
         #     print('CAT:', event_category)
         #     print('PROVA B: ',data_jets[event_category ==1])

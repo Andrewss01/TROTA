@@ -41,7 +41,7 @@ def find_folder(redirector, username, remote_dir, dataset_label, cert_path, ca_p
     subfold.sort()
     print(subfold)
     subfold = subfold[-1]
-
+    print(redirector+"/store/user/"+username+"/"+remote_dir+"/"+dataset_label+"/"+subfold)
     return redirector+"/store/user/"+username+"/"+remote_dir+"/"+dataset_label+"/"+subfold
 
 def job_exit_code(job_logFile):
@@ -73,7 +73,7 @@ def checkSubmitStatus(redirector, username, uid, sample, running_folder, remote_
     jobs_total = 0 
     for f in listoffile: 
         if f.startswith("file"):
-            n = int(f.split("file")[-1])
+            n = int(f.split("file_")[-1])
             if n>jobs_total: jobs_total = n
     jobs_total += 1
 
@@ -170,9 +170,9 @@ def check_errors_fromcondor(dataset, username, uid, remote_folder_name, redirect
     else:
         print(f"Resubmitting {len(jobs_with_errors_numbers)} jobs with Davix errors in dataset {dataset}...")
         for n in jobs_with_errors_numbers:
-            subprocess.run(f"rm {err_folder}/{dataset}_{n}.err", shell=True, capture_output=True, text=True)
-            subprocess.run(f"rm {output_folder}/{dataset}_{n}.out", shell=True, capture_output=True, text=True)
-            subprocess.run(f"rm {log_folder}/{dataset}_{n}.log", shell=True, capture_output=True, text=True)
+            subprocess.run(f"rm {err_folder}/file_{n}.err", shell=True, capture_output=True, text=True)
+            subprocess.run(f"rm {output_folder}/file_{n}.out", shell=True, capture_output=True, text=True)
+            subprocess.run(f"rm {log_folder}/file_{n}.log", shell=True, capture_output=True, text=True)
         print("REMOVED condor log, err and out files ")
         subprocess.run(str_resubmit, shell=True, capture_output=True, text=True)
     if delete_files_fromtier:

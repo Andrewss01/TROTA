@@ -81,19 +81,16 @@ def runner_writer(folder = "./", name = None, label = None, file = None, path_to
 label =launchtime
 if year == 2024:
     folder = '/afs/cern.ch/user/a/apuglia/CMSSW_14_1_8/src/PhysicsTools/NanoAODTools/condor/tmp/trainings/'+name+'_trota_24_'+pfc_sv+top_type+'_'+label+'/'
-    in_file = '/eos/user/a/apuglia/TROTA/pkls/training_dataset_1_pt_cut_600.pkl' #file su cui girare la grid search  
+    in_file = '/eos/user/a/apuglia/TROTA/TROTA2024/pkls/training_dataset_1_pt_cut_600.pkl' #file su cui girare la grid search  
     components = 'QCD_HT1000to1200_0,QCD_HT100to200_0,QCD_HT1200to1500_0,QCD_HT1500to2000_0,QCD_HT2000_0,QCD_HT200to400_0,QCD_HT400to600_0,QCD_HT40to70_0,QCD_HT600to800_0,QCD_HT70to100_0,QCD_HT800to1000_0,TT_dilep_0,TT_hadr_0,TT_semilep_0,ZJetsToNuNu_HT100to200_0,ZJetsToNuNu_HT1500to2500_0,ZJetsToNuNu_HT200to400_0,ZJetsToNuNu_HT2500_0,ZJetsToNuNu_HT400to800_0,ZJetsToNuNu_HT800to1500_0'
+#cambiare le componnenti
 elif year == 2022:
     folder = '/afs/cern.ch/user/a/apuglia/CMSSW_14_1_8/src/PhysicsTools/NanoAODTools/condor/tmp/trainings/'+name+'_trota_22_'+pfc_sv+top_type+'_'+label+'/'
-    in_file = '/eos/user/a/apuglia/Tprime/pkls/training_dataset_1_pt_cut_600.pkl' #file su cui girare la grid search  
-    components = 'QCD_HT1000to1200_0,QCD_HT100to200_0,QCD_HT1200to1500_0,QCD_HT1500to2000_0,QCD_HT2000_0,QCD_HT200to400_0,QCD_HT400to600_0,QCD_HT600to800_0,QCD_HT70to100_0,QCD_HT800to1000_0,TT_dilep_0,TT_hadr_0,TT_semilep_0,TprimeToTZ_1000_0,TprimeToTZ_1100_0,TprimeToTZ_1200_0,TprimeToTZ_1300_0,TprimeToTZ_1400_0,TprimeToTZ_1500_0,TprimeToTZ_1600_0,TprimeToTZ_1700_0,TprimeToTZ_700_0,TprimeToTZ_800_0,TprimeToTZ_900_0,ZJetsToNuNu_2jets_PT100to200_1J_0,ZJetsToNuNu_2jets_PT100to200_2J_0,ZJetsToNuNu_2jets_PT200to400_1J_0,ZJetsToNuNu_2jets_PT200to400_2J_0,ZJetsToNuNu_2jets_PT400to600_1J_0,ZJetsToNuNu_2jets_PT400to600_2J_0,ZJetsToNuNu_2jets_PT40to100_1J_0,ZJetsToNuNu_2jets_PT40to100_2J_0,ZJetsToNuNu_2jets_PT600_1J_0,ZJetsToNuNu_2jets_PT600_2J_0'
-#trota pt cut: 'QCD_HT1000to1200_0,QCD_HT100to200_0,QCD_HT1200to1500_0,QCD_HT1500to2000_0,QCD_HT2000_0,QCD_HT200to400_0,QCD_HT400to600_0,QCD_HT40to70_0,QCD_HT600to800_0,QCD_HT70to100_0,QCD_HT800to1000_0,TT_dilep_0,TT_hadr_0,TT_semilep_0,ZJetsToNuNu_HT100to200_0,ZJetsToNuNu_HT1500to2500_0,ZJetsToNuNu_HT200to400_0,ZJetsToNuNu_HT2500_0,ZJetsToNuNu_HT400to800_0,ZJetsToNuNu_HT800to1500_0'
-#trota  'QCD_HT1000to1200_0,QCD_HT100to200_0,QCD_HT1200to1500_0,QCD_HT1500to2000_0,QCD_HT2000_0,QCD_HT200to400_0,QCD_HT400to600_0,QCD_HT40to70_0,QCD_HT600to800_0,QCD_HT70to100_0,QCD_HT800to1000_0,TT_dilep_0,TT_hadr_0,TT_hadr_1,TT_semilep_0,ZJetsToNuNu_HT100to200_0,ZJetsToNuNu_HT1500to2500_0,ZJetsToNuNu_HT200to400_0,ZJetsToNuNu_HT2500_0,ZJetsToNuNu_HT400to800_0,ZJetsToNuNu_HT800to1500_0'
-
+    in_file = '/eos/user/a/apuglia/TROTA/TROTA2022/pkls/training_dataset_1_pt_cut_600_reduced.pkl' #file su cui girare la grid search  
+    components = 'QCD_HT1000to1200_0,QCD_HT100to200_0,QCD_HT1200to1500_0,QCD_HT1500to2000_0,QCD_HT2000_0,QCD_HT200to400_0,QCD_HT400to600_0,QCD_HT600to800_0,QCD_HT70to100_0,QCD_HT800to1000_0,TT_dilep_0,TT_dilep_1,TT_hadr_0,TT_hadr_1,TT_semilep_0,TT_semilep_1,TprimeToTZ_1000_0,TprimeToTZ_1100_0,TprimeToTZ_1100_1,TprimeToTZ_1200_0,TprimeToTZ_1200_1,TprimeToTZ_1300_0,TprimeToTZ_1400_0,TprimeToTZ_1500_0,TprimeToTZ_1600_0,TprimeToTZ_1600_1,TprimeToTZ_1700_0,TprimeToTZ_1800_0,TprimeToTZ_1800_1,TprimeToTZ_700_0,TprimeToTZ_700_1,TprimeToTZ_800_0,TprimeToTZ_800_1,TprimeToTZ_900_0,TprimeToTZ_900_1,ZJetsToNuNu_HT100to200_0,ZJetsToNuNu_HT1500to2500_0,ZJetsToNuNu_HT200to400_0,ZJetsToNuNu_HT2500_0,ZJetsToNuNu_HT400to800_0,ZJetsToNuNu_HT800to1500_0'
 
  
 
-#'QCD_HT1000to1200_0,QCD_HT100to200_0,QCD_HT1200to1500_0,QCD_HT1500to2000_0,QCD_HT2000_0,QCD_HT200to400_0,QCD_HT400to600_0,QCD_HT600to800_0,QCD_HT70to100_0,QCD_HT800to1000_0,TT_dilep_0,TT_hadr_0,TT_semilep_0,TprimeToTZ_1000_0,TprimeToTZ_1100_0,TprimeToTZ_1200_0,TprimeToTZ_1300_0,TprimeToTZ_1400_0,TprimeToTZ_1500_0,TprimeToTZ_1600_0,TprimeToTZ_1700_0,TprimeToTZ_700_0,TprimeToTZ_800_0,TprimeToTZ_900_0,ZJetsToNuNu_2jets_PT100to200_1J_0,ZJetsToNuNu_2jets_PT100to200_2J_0,ZJetsToNuNu_2jets_PT200to400_1J_0,ZJetsToNuNu_2jets_PT200to400_2J_0,ZJetsToNuNu_2jets_PT400to600_1J_0,ZJetsToNuNu_2jets_PT400to600_2J_0,ZJetsToNuNu_2jets_PT40to100_1J_0,ZJetsToNuNu_2jets_PT40to100_2J_0,ZJetsToNuNu_2jets_PT600_1J_0,ZJetsToNuNu_2jets_PT600_2J_0'
  
 if year==2022:
     path_to_model = "/eos/user/a/apuglia/TROTA/TROTA2022/trainings/"+name+"_trota_22_"+pfc_sv+top_type+"_"+label+"/" 

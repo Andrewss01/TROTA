@@ -16,7 +16,9 @@ parser.add_option('--dryrun', dest='debug', action='store_true', default=False, 
 parser.add_option('-s', '--submit', dest='submit', action='store_true', default=False, help='True if you want to submit jobs')
 parser.add_option('-e', '--evaluate', action = 'store_true', default = False, help='True if you want to evaluate with the training models')
 parser.add_option('--status', action='store_true', default=False, help='True if you want to check status of jobs')
-parser.add_option('--folder', dest='folder', default='TROTA2024/Eval_samples', help = 'choose the folder name on you tier where the files will be saved')
+parser.add_option('--folder', dest='folder', default='TROTA2024/Training_samples', help = 'choose the folder name on you tier where the files will be saved')
+parser.add_option('--nfiles', dest='nfiles', type=int, default=5, help = 'choose the folder name on you tier where the files will be saved')
+
 (opt, args) = parser.parse_args()
 debug = opt.debug 
 submit = opt.submit
@@ -24,6 +26,7 @@ tier = opt.tier
 evaluate = opt.evaluate
 status = opt.status
 tier_folder = opt.folder
+n_files = opt.nfiles
 
 
 
@@ -191,8 +194,8 @@ if submit:
             
             if debug: files_list = files_list[:1]
             print('numer total files: ', len(files_list))
-            if len(files_list)>=200:
-                files_list = files_list[:200]
+            if len(files_list)>=n_files:
+                files_list = files_list[:n_files]
             for idx, file in enumerate(files_list):
                 print("...submitting file ", idx, end = '\r')
                 label = 'file_'+str(idx)

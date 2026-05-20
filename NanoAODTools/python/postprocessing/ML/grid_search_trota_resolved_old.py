@@ -3,7 +3,6 @@ seed_value= 1
 import os
 os.environ['PYTHONHASHSEED']=str(seed_value)
 
-
 import random
 random.seed(seed_value)
 import numpy as np
@@ -30,7 +29,7 @@ import pickle as pkl
 # import random
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report, roc_auc_score, accuracy_score, f1_score, confusion_matrix, auc, roc_curve
-from tensorflow.keras.layers import Dense, Dropout, LSTM, concatenate, GRU,Masking, Activation, TimeDistributed, Conv1D, BatchNormalization, MaxPooling1D, Reshape, Flatten
+from tensorflow.keras.layers import Dense, Dropout, LSTM, concatenate, GRU,Masking, Activation, TimeDistributed, Conv1D, BatchNormalization, MaxPooling1D, Reshape, Flatten, GlobalAveragePooling1D
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.wrappers.scikit_learn import KerasClassifier
 from tensorflow.keras.callbacks import EarlyStopping
@@ -47,15 +46,13 @@ hep.style.use(hep.style.CMS)
 from sklearn.utils import class_weight
 import argparse
 
-random.seed(42)
-np.random.seed(42)
-tf.random.set_seed(42)
 
 ROOT.gROOT.SetBatch()
 ROOT.gStyle.SetOptStat(0)
 
 
-usage = 'python3 tuning_mixed_trota_standard.py -s QCD_HT100to200_0,QCD_HT1500to2000_0,QCD_HT2000_0,QCD_HT200to400_0,QCD_HT400to600_0,QCD_HT600to800_0,QCD_HT70to100_0,TT_hadronic_0,TT_hadronic_1,TT_hadronic_2,TT_hadronic_3,TT_hadronic_4,TT_hadronic_5,TT_semilep_0,TT_semilep_1,TT_semilep_2,TT_semilep_3,TT_semilep_4,TT_semilep_5,ZJetsto2Nu_HT1500to2500_0,ZJetsto2Nu_HT2500_0,ZJetsto2Nu_HT400to800_0,ZJetsto2Nu_HT800to1500_0 -i /eos/user/a/apuglia/Master_Thesis/pkls/training_dataset_1.pkl -o True -g /afs/cern.ch/user/a/apuglia/CMSSW_14_1_7/src/PhysicsTools/NanoAODTools/python/postprocessing/AndreaThesis/final_trainings/grid_search_lstm_28_08_2025 -m /afs/cern.ch/user/a/apuglia/CMSSW_14_1_7/src/PhysicsTools/NanoAODTools/python/postprocessing/AndreaThesis/final_trainings/grid_search_lstm_28_08_2025/model_28_08_2025.h5 -j /afs/cern.ch/user/a/apuglia/CMSSW_14_1_7/src/PhysicsTools/NanoAODTools/python/postprocessing/AndreaThesis/final_trainings/grid_search_lstm_28_08_2025/scores_28_08_2025.json -v True -l 28_08_2025'
+usage = 'python3 Tuning_Training.py -s TT,ZJ -i /eos/user/a/apuglia/thesis/training_dataset/trainingSet_PF_SV_10k.pkl -o True -g ./model_26_04_2025/ -m ./model_26_04_2025/model_26_04_2025.h5 -j ./model_26_04_2025/scores_26_04_2025.json -v True'
+
 parser = argparse.ArgumentParser(usage)
 parser.add_argument('-s', '--samples'   , dest = 'samples'   , required = True  )
 parser.add_argument('-i', '--inFile'    , dest = 'inFile'    , required = True  )
@@ -85,7 +82,7 @@ if not os.path.exists(path_graphics):
 with open(inFile,'rb') as fpkl:
     dataset = pkl.load(fpkl)
 components = dataset.keys()
-categories = ['3j1fj', '3j0fj', '2j1fj']
+categories = ['3j0fj']
 if verbose:
     print(f'components: {components}')
 
@@ -97,6 +94,36 @@ for c in components:
             break
 for c_todrop in components_todrop:
     dataset.pop(c_todrop)
+
+for c in components:
+    for cat in categories: 
+        idx_truetop  = [i for i,x in enumerate(dataset[c][cat][3] == 1) if x == True]
+        idx_falsetop = [i for i,x in enumerate(dataset[c][cat][3] == 0) if x == True]
+
+        # print('selezionando i top per: ', c, ' ', cat)
+        # print('False tops: ', len(idx_falsetop), ' True tops: ', len(idx_truetop))
+
+        if len(idx_truetop) == 0:
+            # print('NO TRUE TOPS')
+            idx_todrop = random.sample(idx_falsetop, int(len(idx_falsetop)*(0.9)))
+        elif len(idx_falsetop)>2*len(idx_truetop):
+            idx_todrop = random.sample(idx_falsetop, len(idx_falsetop)-2*len(idx_truetop))
+        else:
+            idx_todrop = []
+
+        dataset[c][cat][0] = np.delete(dataset[c][cat][0], idx_todrop, axis = 0)
+        dataset[c][cat][1] = np.delete(dataset[c][cat][1], idx_todrop, axis = 0)
+        dataset[c][cat][2] = np.delete(dataset[c][cat][2], idx_todrop, axis = 0)
+        dataset[c][cat][3] = np.delete(dataset[c][cat][3], idx_todrop, axis = 0)
+        dataset[c][cat][4] = np.delete(dataset[c][cat][4], idx_todrop, axis = 0)
+        # dataset[c][cat][5] = np.delete(dataset[c][cat][5], idx_todrop, axis = 0)
+        
+
+        idx_truetop  = [i for i,x in enumerate(dataset[c][cat][3]==1) if x == True]
+        idx_falsetop = [i for i,x in enumerate(dataset[c][cat][3]==0) if x == True]
+
+        # print('selezionando i top per: ', c, ' ', cat)
+        # print('False tops: ', len(idx_falsetop), ' True tops: ', len(idx_truetop))
 
 def multi_score(dataset):
     multi_output = []
@@ -113,108 +140,110 @@ def multi_score(dataset):
     return y
 
 
+
+
 class trainer: 
-    def __init__(self, X_jet, X_fatjet, X_top, y, best_hyperparameters = None):
+    def __init__(self, X_jet, X_fatjet, X_top,  y, best_hyperparameters = None):
         self.X_jet = X_jet
         self.X_fatjet = X_fatjet
         self.X_top = X_top
+        
         self.y = y
         self.best_hps = best_hyperparameters
-
+        # self.history = None
+        # self.model  = None
 
     def split(self, test_size):
         self.X_jet_train, self.X_jet_test, self.X_fatjet_train, self.X_fatjet_test, self.X_top_train, self.X_top_test, self.y_train, self.y_test = train_test_split(self.X_jet, self.X_fatjet, self.X_top, self.y,
                                                                                                                                                                     stratify = self.y, shuffle = True, test_size= test_size)
     
     def model_builder_tuning(self, hp):
-        InputShape_FatJet = self.X_fatjet_train.shape[1]
+        # InputShape_FatJet = self.X_fatjet_train.shape[1]
         InputShape_Jet = self.X_jet_train.shape[2]
         InputShape_Top = self.X_top_train.shape[1]
-
-        fj_inputs = tf.keras.Input(shape = (InputShape_FatJet,), name = 'fatjet')
+        # self.X_fatjet_train.shape[1], self.X_jet_train.shape[2], self.X_top_train.shape[1], self.X_pfc_train.shape[2], self.X_sv_train.shape[2]
+        # fj_inputs = tf.keras.Input(shape = (InputShape_FatJet,), name = 'fatjet')
         jet_inputs = tf.keras.Input(shape = (None, InputShape_Jet,), name= 'jet')
         top_inputs = tf.keras.Input(shape = (InputShape_Top,), name = 'top')
 
 
-        x = BatchNormalization()(fj_inputs)
-        fj_units              = hp.Int('fj_units', min_value = 16, max_value = 128, step = 2, sampling = 'log')
-        x = Dense(units = fj_units, activation = 'relu', kernel_initializer = 'random_uniform')(x)
+        
+
+        # print('shape')
+        x = BatchNormalization()(jet_inputs)
+        jet_1= x[:,0,:]
+        jet_2= x[:,1,:]
+        jet_3 = x[:,2,:]
+        # print(x.shae)
+        # x  = Flatten()(x)
+        # print('after flatten', x.shape)
+        j_units = hp.Int('j_units', min_value = 32, max_value = 96, step = 64)
+        j_activation = hp.Choice('j_activation', values = ['relu', 'sigmoid', 'tanh'])
+        j_kernel_initializer = hp.Choice('j_kernel_initializer', values = ['random_uniform', 'random_normal'])
+        
+        # j_dropout = hp.Choice('j_dropout', values = list(np.arange(0,1,0.3)))
+        jet1_processed = Dense(j_units, activation=j_activation, kernel_initializer = j_kernel_initializer)(jet_1)
+        jet1_processed = Dropout(0.2)(jet1_processed)
+        jet2_processed = Dense(j_units, activation=j_activation, kernel_initializer = j_kernel_initializer)(jet_2)
+        jet2_processed = Dropout(0.2)(jet2_processed)
+        jet3_processed = Dense(j_units, activation=j_activation, kernel_initializer = j_kernel_initializer)(jet_3)
+        jet3_processed = Dropout(0.2)(jet3_processed)
+        x = concatenate([jet1_processed, jet2_processed, jet3_processed])
+       
+        dense_units = hp.Int('dense_units', min_value =32,max_value = 96, step = 64)
+        dense_activation = hp.Choice('dense_activation', values =  ['relu', 'sigmoid', 'tanh'])
+        dense_kernel_initializer = hp.Choice('dense_kernel_initializer', values = ['random_uniform', 'random_normal'])
+
+        x = Dense(units = dense_units, activation = dense_activation, kernel_initializer = dense_kernel_initializer)(x)
         x = Dropout(0.2)(x)
-        x = Dense(units = fj_units//2, activation="relu")(x)
 
-
-        y = Masking(mask_value = 0.)(jet_inputs)
-        y = BatchNormalization()(y)
-
-        j_units = hp.Int('j_units', min_value = 16, max_value = 128, step = 2, sampling = 'log')
-        j_dropout = hp.Choice('j_dropout', values = [0.0,0.2])
-
-        y = keras.layers.LSTM(units = j_units, 
-                              return_sequences = True,
-                              dropout = j_dropout)(y)
-
-        y  = keras.layers.LSTM(units = j_units//2)(y)
-        z = BatchNormalization()(top_inputs)
-        z = Dense(8, activation = 'relu')(z)
-        
-
-        
-        x = concatenate([x,y])
-        x = concatenate([x,z])
-        
-
-        dense_units = hp.Int('dense_units', min_value = 32, max_value = 128, step=2, sampling = 'log')
-        x = Dense(dense_units, activation = 'relu', kernel_initializer = 'random_normal')(x)
-        x = Dropout(0.3)(x)
         outputs = Dense(3, activation = 'softmax')(x)
 
-        self.model = tf.keras.Model( inputs = [fj_inputs, jet_inputs, top_inputs], outputs = outputs)
-        l_rate = hp.Float('learning_rate', 1e-4, 1e-1, sampling = 'log', step = 10)
+        self.model = tf.keras.Model( inputs = [jet_inputs, top_inputs], outputs = outputs)
+        l_rate = hp.Float('learning_rate', 1e-4, 1e-2, sampling = 'log', step = 10)
 
-        trainer = tf.keras.optimizers.Nadam(learning_rate = l_rate)
+        trainer = tf.keras.optimizers.Nadam(learning_rate = l_rate, clipnorm = 1.0)
         loss = tf.keras.losses.SparseCategoricalCrossentropy()
         self.model.compile(optimizer = trainer, loss = loss, metrics = ['accuracy'])
 
         return self.model
     
-    def model_builder(self, InputShape_FatJet, InputShape_Jet, InputShape_Top):
+    def model_builder(self,  InputShape_Jet, InputShape_Top):
         print('best hps in model builder is: ', self.best_hps)  
 
-        fj_inputs = tf.keras.Input(shape = (InputShape_FatJet,),     name = 'fatjet')
+        # fj_inputs = tf.keras.Input(shape = (InputShape_FatJet,),     name = 'fatjet')
         jet_inputs = tf.keras.Input(shape = (None, InputShape_Jet,), name= 'jet')
         top_inputs = tf.keras.Input(shape = (InputShape_Top,),       name = 'top')
         
-        x = BatchNormalization()(fj_inputs)
-        x = Dense(units = self.best_hps['fj_units'], 
-                  activation = 'relu', 
-                  kernel_initializer = 'random_uniform')(x)
-        x = Dropout(0.2)(x)
-        x = Dense(units = self.best_hps['fj_units']//2, activation="relu")(x)
-         
-        y = Masking(mask_value = 0.)(jet_inputs)
-        y = BatchNormalization()(y)
-
-        y = keras.layers.LSTM(units=self.best_hps['j_units'],
-                              return_sequences = True, 
-                              dropout=self.best_hps['j_dropout'])(y)
-        y = keras.layers.LSTM(self.best_hps['j_units']//2)(y)
-        z = BatchNormalization()(top_inputs)
-        z = Dense(8, activation = 'relu')(z)
-
+        x = BatchNormalization()(jet_inputs)
+        jet_1 = x[:,0,:]
+        jet_2 = x[:,1,:]
+        jet_3 = x[:,2,:]
         
-        x = concatenate([x,y])
-        x = concatenate([x,z])
-
-       
+        jet1_processed = Dense(units = self.best_hps['j_units'], activation=self.best_hps['j_activation'], kernel_initializer = self.best_hps['j_kernel_initializer'])(jet_1)
+        jet1_processed = Dropout(0.2)(jet1_processed)
         
-        x = Dense(units= self.best_hps['dense_units'], activation = 'relu', kernel_initializer = 'random_normal')(x)
+        jet2_processed = Dense(units = self.best_hps['j_units'], activation=self.best_hps['j_activation'], kernel_initializer = self.best_hps['j_kernel_initializer'])(jet_2)
+        jet2_processed = Dropout(0.2)(jet2_processed)
+        
+        jet3_processed = Dense(units = self.best_hps['j_units'], activation=self.best_hps['j_activation'], kernel_initializer = self.best_hps['j_kernel_initializer'])(jet_3)
+        jet2_processed = Dropout(0.2)(jet3_processed)
+        x = concatenate([jet1_processed, jet2_processed, jet3_processed])
+        
+
+        x = keras.layers.Dense(units=self.best_hps['j_units'],
+                              activation=self.best_hps['j_activation'],
+                              kernel_initializer= self.best_hps['j_kernel_initializer'])(x)
+
+    
+        x = Dense(units = self.best_hps['dense_units'], activation = self.best_hps['dense_activation'], kernel_initializer = self.best_hps['dense_kernel_initializer'])(x)
         x = Dropout(0.3)(x)
         outputs = Dense(3, activation = 'softmax')(x)
-
+        
         # outputs = Dense(3, activation = 'softmax')(x)
-        print('best hps are: ', self.best_hps['fj_units'],self.best_hps['j_units'],  
-                self.best_hps['j_dropout'], self.best_hps['learning_rate'])
-        self.model = tf.keras.Model(inputs = [fj_inputs, jet_inputs, top_inputs], outputs = outputs)
+        print('best hps are: ', self.best_hps['j_units'], self.best_hps['j_activation'], self.best_hps['j_kernel_initializer'], 
+        self.best_hps['dense_units'], self.best_hps['dense_kernel_initializer'])
+        self.model = tf.keras.Model(inputs = [jet_inputs, top_inputs], outputs = outputs)
 
         optimizer = tf.keras.optimizers.Nadam(learning_rate = self.best_hps['learning_rate'])
         loss = tf.keras.losses.SparseCategoricalCrossentropy()
@@ -228,7 +257,7 @@ class trainer:
         tuner.search_space_summary()
         self.callbacks()
 
-        tuner.search({'fatjet': self.X_fatjet_train, 'jet': self.X_jet_train, 'top': self.X_top_train}, 
+        tuner.search({'jet': self.X_jet_train, 'top': self.X_top_train}, 
                      self.y_train, validation_split = 0.3, shuffle = True, callbacks = self.callbacks_list, 
                      epochs = max_epochs, batch_size = batch_size, verbose = 1)
 
@@ -257,13 +286,13 @@ class trainer:
 
     def training(self, validation_split, epochs, batch_size, save_model = True, path_to_model = outModel ):     
         self.callbacks()
-        self.model_builder(self.X_fatjet_train.shape[1], self.X_jet_train.shape[2], self.X_top_train.shape[1])
+        self.model_builder(self.X_jet_train.shape[2], self.X_top_train.shape[1])
         print('model is: ', self.model)
         print('y train is: ', np.unique(self.y_train))
         weights = class_weight.compute_class_weight(class_weight= 'balanced', classes = np.unique(self.y_train), y = np.concatenate(self.y_train))
         class_weights = {0: weights[0], 1: weights[1], 2: weights[2]}
         print('class weights is: ',class_weights)
-        self.history = self.model.fit({'fatjet': self.X_fatjet_train, 'jet': self.X_jet_train, 'top': self.X_top_train}, 
+        self.history = self.model.fit({ 'jet': self.X_jet_train, 'top': self.X_top_train}, 
                                       self.y_train, callbacks = self.callbacks_list, validation_split = validation_split, epochs = epochs, batch_size = batch_size, 
                                       verbose = verbose, class_weight = class_weights)
         if save_model:
@@ -271,11 +300,11 @@ class trainer:
     
     def predict(self, X_jet_train = None, X_fatjet_train = None, X_top_train = None, X_jet_test = None, X_fatjet_test = None, X_top_test = None):
         if (X_jet_train is None) and (X_fatjet_train is None) and (X_top_train is None):
-            self.y_pred_train = self.model.predict({'fatjet': self.X_fatjet_train, 'jet': self.X_jet_train, 'top': self.X_top_train})
-            self.y_pred_test  = self.model.predict({'fatjet': self.X_fatjet_test,  'jet': self.X_jet_test , 'top': self.X_top_test})
+            self.y_pred_train = self.model.predict({ 'jet': self.X_jet_train, 'top': self.X_top_train})
+            self.y_pred_test  = self.model.predict({ 'jet': self.X_jet_test , 'top': self.X_top_test})
         else:
-            y_pred_train = self.model.predict({'fatjet': X_fatjet_train, 'jet': X_jet_train, 'top': X_top_train})
-            y_pred_test  = self.model.predict({'fatjet': X_fatjet_test , 'jet': X_jet_test , 'top': X_top_test })
+            y_pred_train = self.model.predict({ 'jet': X_jet_train, 'top': X_top_train})
+            y_pred_test  = self.model.predict({'jet': X_jet_test , 'top': X_top_test})
             return y_pred_train, y_pred_test
 
     def train_test_discrimination(self, bins):
@@ -401,7 +430,7 @@ class trainer:
     def test_roc(self, roc_model = 'OvR'):
         # fpr_train, tpr_train, trs_train = self.plot_roc("Train Baseline", np.concatenate(self.y_train), self.y_pred_train, color="steelblue", roc_model = 'OVR')
         if roc_model == 'OvR':
-            names_ovr = ['False top', 'True top', 'QCD']
+            names_ovr = ['false tt', 'truee tt', 'zj']
             colors = ['steelblue','darkorange','green']
             fpr_ovr,tpr_ovr,trs_ovr = self.plot_roc(names_ovr, np.concatenate(self.y_test), self.y_pred_test, color=colors, linestyle="--", roc_model = 'OvR')
             results_ovr = [fpr_ovr, tpr_ovr, trs_ovr]
@@ -409,7 +438,7 @@ class trainer:
         if roc_model == 'OvO':
 
 
-            names_ovo = ['True top vs False top', 'True Top vs QCD']
+            names_ovo = ['true tt vs false tt', 'true tt vs zj']
             colors = ['steelblue','darkorange','green']
         
             fpr_ovo,tpr_ovo,trs_ovo = self.plot_roc(names_ovo, np.concatenate(self.y_test), self.y_pred_test, color=colors,linestyle = '--', roc_model ='OvO')
@@ -419,16 +448,18 @@ class trainer:
             return results_ovo
     def evaluate(self, X_jet_test = None, X_fatjet_test = None, X_top_test = None, y_test = None):
         if (X_jet_test is None) and (X_fatjet_test is None) and (X_top_test is None) and (y_test is None):
-            self.eval_result = self.model.evaluate({"fatjet": self.X_fatjet_test, "jet": self.X_jet_test, "top": self.X_top_test}, self.y_test)
+            self.eval_result = self.model.evaluate({ "jet": self.X_jet_test, "top": self.X_top_test}, self.y_test)
             return self.eval_result
         else:
-            eval_result      = self.model.evaluate({"fatjet": X_fatjet_test, "jet": X_jet_test, "top": X_top_test}, y_test)
+            eval_result      = self.model.evaluate({"jet": X_jet_test, "top": X_top_test}, y_test)
             return eval_result
- 
+
 
 X_jet                     = np.concatenate([dataset[c][cat][0] for c in samples for cat in categories]) # here we use only the samples selected by the user
 X_fatjet                  = np.concatenate([dataset[c][cat][1] for c in samples for cat in categories]) # here we use only the samples selected by the user
 X_top                     = np.concatenate([dataset[c][cat][2] for c in samples for cat in categories]) # here we use only the samples selected by the user
+# X_pfc                     = np.concatenate([dataset[c][cat][4] for c in samples for cat in categories])
+# X_sv                      = np.concatenate([dataset[c][cat][5] for c in samples for cat in categories])
 y                         = np.concatenate([dataset[c][cat][3] for c in samples for cat in categories]) # here we use only the samples selected by the user
 
 if multiscore:
@@ -436,8 +467,13 @@ if multiscore:
 
 data = X_jet, X_fatjet, X_top, y
 
+
 if verbose:
     print("Data loaded for the training:")
+    # print(f"X jet is: {X_jet} ")
+    # print(f"X fat jet is: {X_fatjet} ")
+    # print(f"X tops is: {X_top} ")
+    # print(f"y is: {y} ")
     print(f"\tsamples used:           {samples}")
     print(f"\tNumber of tops:         {len(y)}")
     print(f"\tNumber of true tops:    {len([i for i, x in enumerate(y == 1) if x == True])}")
@@ -446,14 +482,16 @@ if verbose:
     print(f"\tX_jet shape:            {X_jet.shape}")
     print(f"\tX_fatjet shape:         {X_fatjet.shape}")
     print(f"\tX_top shape:            {X_top.shape}")
+    # print(f"\tX_pfc shape:            {X_pfc.shape}")
+    # print(f"\tX_sv shape:             {X_sv.shape}")
     print(f"\ty shape:                {y.shape}")
 
 
 
 trainer1 = trainer(*data)
 trainer1.split(test_size= 0.3)
-trainer1.tune_hps(project_name= '../TROTA'+year+'/tuning/grid_search_trota_mixed_'+label, max_epochs= 200, batch_size= 250)
-trainer1.training(validation_split= 0.3, epochs = 200, batch_size= 250)
+trainer1.tune_hps(project_name= '../TROTA'+year+'/tuning/grid_search_trota_resolved_'+label, max_epochs= 5, batch_size= 200)
+trainer1.training(validation_split= 0.3, epochs = 1000, batch_size= 1024)
 best_hyperparams  = trainer1.best_hps
 print(f"BEST HPS FOUND:\n{best_hyperparams}")
 best_hps_path = path_outJson.replace('scores', 'best_hps')
@@ -478,7 +516,7 @@ if verbose:
 
 
 fprs_wp          = [("10%", 0.1), ("5%", 0.05), ("1%", 0.01), ("0.1%", 0.001)]
-components = ["False top", "True top", "QCD"] 
+components = ["False TT", "True TT", "QCD"] 
 scores = {}
 fpr_ovr, tpr_ovr, trs_ovr = ovr_res[0], ovr_res[1], ovr_res[2]
 for index in range(len(components)):
@@ -490,7 +528,7 @@ for index in range(len(components)):
         scores[components[index]]['trs ' + wp[0]] = float(trs[fpr<wp[1]][-1])
 
 
-components = ['True top vs False top', 'True top vs QCD']
+components = ['True TT vs False TT', 'True TT vs QCD']
 
 fpr_ovo, tpr_ovo, trs_ovo = ovo_res[0], ovo_res[1], ovo_res[2]
 for index in range(len(components)):

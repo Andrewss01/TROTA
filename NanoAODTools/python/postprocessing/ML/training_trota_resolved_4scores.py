@@ -99,36 +99,6 @@ for c in components:
 for c_todrop in components_todrop:
     dataset.pop(c_todrop)
 
-for c in components:
-    for cat in categories: 
-        idx_truetop  = [i for i,x in enumerate(dataset[c][cat][3] == 1) if x == True]
-        idx_falsetop = [i for i,x in enumerate(dataset[c][cat][3] == 0) if x == True]
-
-        print('selezionando i top per: ', c, ' ', cat)
-        print('False tops: ', len(idx_falsetop), ' True tops: ', len(idx_truetop))
-
-        if len(idx_truetop) == 0:
-            print('NO TRUE TOPS')
-            idx_todrop = random.sample(idx_falsetop, int(len(idx_falsetop)*(0.9)))
-        elif len(idx_falsetop)>2*len(idx_truetop):
-            idx_todrop = random.sample(idx_falsetop, len(idx_falsetop)-2*len(idx_truetop))
-        else:
-            idx_todrop = []
-
-        dataset[c][cat][0] = np.delete(dataset[c][cat][0], idx_todrop, axis = 0)
-        dataset[c][cat][1] = np.delete(dataset[c][cat][1], idx_todrop, axis = 0)
-        dataset[c][cat][2] = np.delete(dataset[c][cat][2], idx_todrop, axis = 0)
-        dataset[c][cat][3] = np.delete(dataset[c][cat][3], idx_todrop, axis = 0)
-        dataset[c][cat][4] = np.delete(dataset[c][cat][4], idx_todrop, axis = 0)
-        # dataset[c][cat][5] = np.delete(dataset[c][cat][5], idx_todrop, axis = 0)
-        
-
-        idx_truetop  = [i for i,x in enumerate(dataset[c][cat][3]==1) if x == True]
-        idx_falsetop = [i for i,x in enumerate(dataset[c][cat][3]==0) if x == True]
-
-        print('selezionando i top per: ', c, ' ', cat)
-        print('False tops: ', len(idx_falsetop), ' True tops: ', len(idx_truetop))
-
 def multi_score(dataset):
     multi_output = []
     for c in samples:
