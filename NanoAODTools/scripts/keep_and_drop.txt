@@ -9,3 +9,5 @@ keep PuppiMET*
 keep Electron* 
 keep Muon*
 keep HLT*
+keep Generator*
+keep LHE*
