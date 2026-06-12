@@ -1,0 +1,158 @@
+outputfolder:
+  postselector_results: { 
+    "2022":         "",
+    "2022EE":       "",
+    "2023":         "",
+    "2023postBPix": "",
+    }
+  triggerSF_results: { 
+    "2022":         "/eos/user/a/acagnott/DarkMatter/nosynch/trigSF_2022/",
+    "2022EE":       "/eos/user/a/acagnott/DarkMatter/nosynch/trigSF_2022EE/",
+    "2023":         "/eos/user/a/acagnott/DarkMatter/nosynch/trigSF_2023/",
+    "2023postBPix": "/eos/user/a/acagnott/DarkMatter/nosynch/trigSF_2023postBPix/",
+    }
+
+dict_samples:
+  "2022":             "../samples/dict_samples_2022.json"
+  "2023":             "../samples/dict_samples_2023.json"
+  "2024":             "../samples/dict_samples_2024_v2.json"
+  "Full2022":         "."
+  "Full2023":         "."
+  "Full2022_Full2023": ["../samples/dict_samples_2022.json", "../samples/dict_samples_2023.json"]
+  
+
+plotting:
+  lumi_dict:
+    {
+      "2022":           7.980,
+      "2022EE":         26.672,
+      "2023":           18.063,
+      "2023postBPix":   9.693
+    }
+  folder_dict:
+    {
+      "2022":               "",
+      "2022EE":             "",
+      "2023":               "/eos/user/l/lfavilla/RDF_DManalysis/TopSF/results/run2023_SemiLep_Merged/",
+      "2023postBPix":       "",
+      "Full2022":           "",
+      "Full2023":           "",
+      "Full2022_Full2023":  ""
+    }
+
+  folder_www_dict:
+    {
+      "2022":               "",
+      "2022EE":             "",
+      "2023":               "/eos/user/l/lfavilla/www/RDF_DManalysis/TopSF/SemiLep_prefit/run2023_SemiLep_Merged/",
+      "2023postBPix":       "",
+      "Full2022":           "",
+      "Full2023":           "",
+      "Full2022_Full2023":  ""
+    }
+
+  datasets_to_plot:
+    {
+      "2022":
+              [
+                  "DataMuon_2022",
+                  "TT_2022",
+                  "TW_2022",
+                  "QCD_2022",
+                  "ZJetsToNuNu_2jets_2022",
+                  "WJets_2jets_2022",
+                  # "TprimeToTZ_700_2022",
+                  # "TprimeToTZ_1000_2022",
+                  # "TprimeToTZ_1800_2022"
+              ],
+      "2022EE":
+              [
+                  "DataMuon_2022EE",
+                  "TT_2022EE",
+                  "TW_2022EE",
+                  "QCD_2022EE",
+                  "ZJetsToNuNu_2jets_2022EE",
+                  "WJets_2jets_2022EE",
+                  # "TprimeToTZ_700_2022EE",
+                  # "TprimeToTZ_1000_2022EE",
+                  # "TprimeToTZ_1800_2022EE"
+              ],
+      "2023":
+              [
+                  "DataMuon_2023",
+                  "TT_2023",
+                  "TW_2023",
+                  "QCD_2023",
+                  "ZJetsToNuNu_2jets_2023",
+                  "WJets_2jets_2023",
+                  # "TprimeToTZ_700_2023",
+                  # "TprimeToTZ_1000_2023",
+                  # "TprimeToTZ_1800_2023"
+              ],
+      "2023postBPix":
+              [
+                  "DataMuon_2023postBPix",
+                  "TT_2023postBPix",
+                  "TW_2023postBPix",
+                  "QCD_2023postBPix",
+                  "ZJetsToNuNu_2jets_2023postBPix",
+                  "WJets_2jets_2023postBPix",
+                  # "TprimeToTZ_700_2023postBPix",
+                  # "TprimeToTZ_1000_2023postBPix",
+                  # "TprimeToTZ_1800_2023postBPix"
+              ],
+    }
+    
+  systematics:
+    {
+      "2022":           [], # "QCDScale"
+      "2022EE":         [],
+      "2023":           [],
+      "2023postBPix":   []
+    }
+
+  scale_signals: 100
+
+TrotaScaleFactor:
+  outputfolder: {
+    "Resolved": {
+                  "2022":         "",
+                  "2022EE":       "",
+                  "2023":         "/eos/user/l/lfavilla/RDF_DManalysis/TopSF/results/run2023_SemiLep_Resolved/",
+                  "2023postBPix": "",
+                },
+    "Mixed": {
+                  "2022":         "",
+                  "2022EE":       "",
+                  # "2023":         "/eos/user/l/lfavilla/RDF_DManalysis/TopSF/results/run2023_SemiLep_AllTopCategories/",
+                  # "2023":         "/eos/user/l/lfavilla/RDF_DManalysis/TopSF/results/run2023_SemiLep_noJetBTagTight_inside_TopHadrCand_wTopPtWeight_noVetoElectron/",
+                  # "2023":         "/eos/user/l/lfavilla/RDF_DManalysis/TopSF/results/run2023_SemiLep_systematics_study/",
+                  "2023":         "/eos/user/l/lfavilla/RDF_DManalysis/TopSF/results/run2023_SemiLep_Mixed/",
+                  "2023postBPix": "",
+                },
+    "Merged": {
+                  "2022":         "",
+                  "2022EE":       "",
+                  "2023":         "/eos/user/l/lfavilla/RDF_DManalysis/TopSF/results/run2023_SemiLep_Merged/",
+                  "2023postBPix": "",
+                },
+    }
+    
+  fit_variable: {
+    "ResolvedLoose":                "MT_W",
+    "ResolvedLooseButNotTight":     "MT_W",
+    "ResolvedTight":                "MT_W",
+    "MixedLoose":                   "MT_W",
+    "MixedLooseButNotTight":        "MT_W",
+    "MixedTight":                   "MT_W",
+    "MergedLoose":                  "MT_W",
+    "MergedLooseButNotTight":       "MT_W",
+    "MergedTight":                  "MT_W",
+  }
+
+  corrlibfolder: {
+    "2022":         "",
+    "2022EE":       "",
+    "2023":         "/eos/user/l/lfavilla/RDF_DManalysis/TopSF/corrections/2023/",
+    "2023postBPix": "",
+  }

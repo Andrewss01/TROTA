@@ -44,6 +44,43 @@ def find_folder(redirector, username, remote_dir, dataset_label, cert_path, ca_p
     print(redirector+"/store/user/"+username+"/"+remote_dir+"/"+dataset_label+"/"+subfold)
     return redirector+"/store/user/"+username+"/"+remote_dir+"/"+dataset_label+"/"+subfold
 
+def find_folders(redirector, username, remote_dir, sample, cert_path, ca_path):
+    # 1. Path base dove CRAB o il sistema di produzione salva i job
+    base_path = redirector+"/store/user/"+username+"/"+remote_dir+"/"+sample.label+"/"+sample.dataset.split("/")[1]+"/"+sample.label
+
+    # 2. Vediamo quali cartelle di "timestamp" esistono (es: 231012_102030)
+    results = subprocess.run([
+        'davix-ls', '-E', cert_path, '--capath', ca_path, base_path
+    ], capture_output=True, text=True, check=True)
+    
+    timestamps = results.stdout.splitlines()
+    timestamps.sort() # Ordiniamo per avere la più recente alla fine
+    
+    if not timestamps:
+        print(f"Nessuna cartella trovata in {base_path}")
+        return []
+
+    latest_timestamp_folder = base_path + "/" + timestamps[-1]
+    results_sub = subprocess.run([
+        'davix-ls', '-E', cert_path, '--capath', ca_path, latest_timestamp_folder
+    ], capture_output=True, text=True, check=True)
+    
+    subfolds = results_sub.stdout.splitlines()
+    
+    valid_paths = []
+    for s in subfolds:
+        # Verifichiamo che sia una cartella numerica (0000, 0001...)
+        if s.isdigit():
+            valid_paths.append(latest_timestamp_folder + "/" + s)
+    
+    # Se per qualche motivo non ci sono cartelle numeriche ma i file sono direttamente lì
+    if not valid_paths:
+        valid_paths.append(latest_timestamp_folder)
+
+    return valid_paths
+
+
+
 def job_exit_code(job_logFile):
     exit_code = None
 
