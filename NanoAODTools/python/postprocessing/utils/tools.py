@@ -533,7 +533,7 @@ def get_jet(jets):
     #         # idx_good += 1
     return goodjet
 def get_fatjet(fatjets):
-    goodfatjets = list(filter(lambda x : x.jetId and abs(x.eta) < 2.7, fatjets))
+    goodfatjets = list(filter(lambda x : x.jetId and abs(x.eta) < 2.7 and (x.globalParT3_QCD + x.globalParT3_Xbb)>0, fatjets))
     # idx_good = 0
     # for idx_fj in range(len(fatjets)):
     #     if fatjets[idx_fj] in goodfatjets:

@@ -11,3 +11,8 @@ keep Muon*
 keep HLT*
 keep Generator*
 keep LHE*
+keep Flag*
+keep PV*
+keep Generator_weight
+keep PSWeight
+keep run*

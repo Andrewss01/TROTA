@@ -64,23 +64,25 @@ def fill_fj(fj_dnn, fj, idx_top, year):
         fj_dnn[idx_top, 11]  = fj.pt
     elif year==2024:
         fj_dnn[idx_top, 0]  = fj.area
-        fj_dnn[idx_top, 1]  = fj.globalParT3_Xbb
-        fj_dnn[idx_top, 2]  = fj.particleNetWithMass_TvsQCD
-        fj_dnn[idx_top, 3]  = fj.particleNetWithMass_WvsQCD
-        fj_dnn[idx_top, 4]  = fj.particleNet_QCD
-        fj_dnn[idx_top, 5]  = fj.particleNetWithMass_QCD
-        fj_dnn[idx_top, 6]  = fj.particleNet_XbbVsQCD
-        fj_dnn[idx_top, 7]  = fj.particleNet_XqqVsQCD
-        fj_dnn[idx_top, 8]  = fj.eta
-        fj_dnn[idx_top, 9]  = fj.mass
-        fj_dnn[idx_top, 10]  = fj.phi
-        fj_dnn[idx_top, 11]  = fj.pt
-        fj_dnn[idx_top, 12]  = fj.globalParT3_TopbWev
-        fj_dnn[idx_top, 13]  = fj.globalParT3_TopbWmv
-        fj_dnn[idx_top, 14]  = fj.globalParT3_TopbWqq
+        fj_dnn[idx_top, 1]  = fj.globalParT3_Xbb/ (fj.globalParT3_Xbb + fj.globalParT3_QCD)
+        fj_dnn[idx_top, 2]  = fj.globalParT3_QCD
+        fj_dnn[idx_top, 3]  = fj.globalParT3_withMassTopvsQCD
+        fj_dnn[idx_top, 4]  = fj.globalParT3_withMassWvsQCD
+        # fj_dnn[idx_top, 5]  = fj.particleNetWithMass_QCD
+        # fj_dnn[idx_top, 6]  = fj.particleNet_XbbVsQCD
+        # fj_dnn[idx_top, 7]  = fj.particleNet_XqqVsQCD
+        fj_dnn[idx_top, 5]  = fj.eta
+        fj_dnn[idx_top, 6]  = fj.mass
+        fj_dnn[idx_top, 7]  = fj.phi
+        fj_dnn[idx_top, 8]  = fj.pt
+        
+        # fj_dnn[idx_top, 12]  = fj.globalParT3_TopbWev
+        # fj_dnn[idx_top, 13]  = fj.globalParT3_TopbWmv
+        # fj_dnn[idx_top, 14]  = fj.globalParT3_TopbWqq
     return fj_dnn
 
 def fill_jets(jets_dnn, j0, j1, j2, sumjet, fj_phi, fj_eta, idx_top, year): 
+    
     if year==2018:
         jets_dnn[idx_top, 0, 0] = j0.area
         jets_dnn[idx_top, 0, 1] = j0.btagDeepB
@@ -349,7 +351,7 @@ class nanoTopevaluate_MultiClass(Module):
             
         elif self.year==2024:
             jets_dnn            = np.zeros((len(tophighpt),3,8))
-            fj_dnn         = np.zeros((len(tophighpt),15))
+            fj_dnn         = np.zeros((len(tophighpt),9))
             if self.pfc:
                 PFC_dnn            = np.zeros((len(tophighpt),n_PFCs,9))
         mass_dnn = np.zeros((len(tophighpt),3))
@@ -540,11 +542,11 @@ class nanoTopevaluate_MultiClass(Module):
 
 
             if self.pfc and self.sv:    
-                scores = self.modelRes({ "jet": jets_dnn_res, "top": mass_dnn_res, 'pfc': PFC_dnn_res, 'sv':SVs_dnn_res}).numpy()
+                scores = self.modelRes({ "jet": jets_dnn_res, 'pfc': PFC_dnn_res, 'sv':SVs_dnn_res}).numpy()
             elif self.pfc and not self.sv:
-                scores = self.modelRes({ "jet": jets_dnn_res, "top": mass_dnn_res, 'pfc': PFC_dnn_res}).numpy()                
+                scores = self.modelRes({ "jet": jets_dnn_res, 'pfc': PFC_dnn_res}).numpy()                
             elif not self.pfc and not self.sv:
-                scores = self.modelRes({ "jet":jets_dnn_res, "top":mass_dnn_res}).numpy()
+                scores = self.modelRes({ "jet":jets_dnn_res}).numpy()
            
             # top_score_DNN = modelRes({"jet": jets_dnn_res,'top': mass_dnn_res,'pfc': PFC_dnn_res, 'sv': SVs_dnn_res}).numpy()
             prob_true_tt_res = (scores[:,1]).flatten().tolist()
