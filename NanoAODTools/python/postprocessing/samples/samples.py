@@ -4311,6 +4311,27 @@ sample_dict = {
     "DataEGammaD2_0_2023postBPix" : DataEGammaD2_0_2023postBPix, "DataEGammaD2_1_2023postBPix" : DataEGammaD2_1_2023postBPix,
     "DataEGamma_2023postBPix" : DataEGamma_2023postBPix,
     
+ ##########################2024#################################
+    "TT_2024": TT_2024, 
+    "TT_dilep_2024": TT_dilep_2024, "TT_hadr_2024": TT_hadr_2024, "TT_semilep_2024": TT_semilep_2024, 
+
+    "QCD_2024": QCD_2024, 
+    "QCD_HT40to70_2024": QCD_HT40to70_2024, "QCD_HT70to100_2024": QCD_HT70to100_2024, "QCD_HT100to200_2024": QCD_HT100to200_2024, 
+    "QCD_HT200to400_2024": QCD_HT200to400_2024, "QCD_HT400to600_2024": QCD_HT400to600_2024, "QCD_HT600to800_2024": QCD_HT600to800_2024, 
+    "QCD_HT800to1000_2024": QCD_HT800to1000_2024, "QCD_HT1000to1200_2024":QCD_HT1000to1200_2024, "QCD_HT1200to1500_2024": QCD_HT1200to1500_2024, 
+    "QCD_HT1500to2000_2024": QCD_HT1500to2000_2024, "QCD_HT2000_2024": QCD_HT2000_2024, 
+
+    "TW_2024": TW_2024, 
+    "Top_W_plus_4Q_2024": Top_W_plus_4Q_2024, "Top_W_plus_LNu2Q_2024": Top_W_plus_LNu2Q_2024, "Top_W_plus_2L2Nu_2024": Top_W_plus_2L2Nu_2024, 
+    "Top_W_minus_4Q_2024": Top_W_minus_4Q_2024, "Top_W_minus_LNu2Q_2024": Top_W_minus_LNu2Q_2024, "Top_W_minus_2L2Nu_2024": Top_W_minus_2L2Nu_2024, 
+
+    "WtoLNu_4Jets_2024": WtoLNu_4Jets_2024, 
+    "WtoLNu_4Jets_1J_2024": WtoLNu_4Jets_1J_2024, "WtoLNu_4Jets_2J_2024": WtoLNu_4Jets_2J_2024, "WtoLNu_4Jets_3J_2024":WtoLNu_4Jets_3J_2024, "WtoLNu_4Jets_4J_2024": WtoLNu_4Jets_4J_2024, 
+
+    "ZJetsToNuNu_2024": ZJetsToNuNu_2024, 
+    "ZJetsToNuNu_HT100to200_2024": ZJetsToNuNu_HT100to200_2024, "ZJetsToNuNu_HT200to400_2024":ZJetsToNuNu_HT200to400_2024, "ZJetsToNuNu_HT400to800_2024":ZJetsToNuNu_HT400to800_2024, 
+    "ZJetsToNuNu_HT800to1500_2024": ZJetsToNuNu_HT800to1500_2024, "ZJetsToNuNu_HT1500to2500_2024": ZJetsToNuNu_HT1500to2500_2024, "ZJetsToNuNu_HT2500_2024": ZJetsToNuNu_HT2500_2024,
+    
     "DataJetMET_2024":      DataJetMET_2024,
     "DataJetMETC_0_2024":   DataJetMETC_0_2024,
     "DataJetMETC_1_2024":   DataJetMETC_1_2024,
