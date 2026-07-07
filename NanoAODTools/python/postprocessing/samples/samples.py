@@ -4349,7 +4349,6 @@ sample_dict = {
     "DataJetMETI_1_2024":   DataJetMETI_1_2024,
     "DataJetMETI_2_2024":   DataJetMETI_2_2024,
     "DataJetMETI_3_2024":   DataJetMETI_3_2024,
->>>>>>> 60b8195 (aggiunti training nuovi 2024)
 
 
     "DataMuon_2024":        DataMuon_2024,
