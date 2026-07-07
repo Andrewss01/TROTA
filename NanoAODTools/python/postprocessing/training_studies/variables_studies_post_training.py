@@ -352,11 +352,11 @@ def accumulate(samples, vars, num_files, wp, PROCESSES,syst, year):
 
 usage = 'python3 post_training_studies.py '
 parser = optparse.OptionParser(usage)
-parser.add_option('-d', '--dat'   , dest='dat'  , type=str, default = 'TT_2024,QCD_2024,ZJetsToNuNu_2024', help='Please enter a dataset name')
-parser.add_option('-j', '--json'  , dest='json' , type=str, default = '../samples/dict_samples_2024.json', help='Please enter a json input file')
-parser.add_option('-v', '--var'   , dest='vars' , type=str, default = "TopMixed_pt",  help='Please enter variables to read')
+parser.add_option('-d', '--dat'   , dest='dat'  , type=str, default = 'TT_2022,QCD_2022,ZJetsToNuNu_2jets_2022', help='Please enter a dataset name')
+parser.add_option('-j', '--json'  , dest='json' , type=str, default = '../samples/dict_samples_2022.json', help='Please enter a json input file')
+parser.add_option('-v', '--var'   , dest='vars' , type=str, default = "TopMixed_pt,TopResolved_pt",  help='Please enter variables to read')
 parser.add_option('-n', '--nfiles', dest='nfiles', type=int, default=1)
-parser.add_option('-w', '--wpoint', dest='wpoint', type=str, default="rejected")
+parser.add_option('-w', '--wpoint', dest='wpoint', type=str, default="all")
 parser.add_option('-s', '--syst', dest='syst', action = "store_true", default = False)
 
 (opt, args) = parser.parse_args()

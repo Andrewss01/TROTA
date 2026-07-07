@@ -11,7 +11,7 @@
 # print(ntot)
 
 import pickle as pkl
-path_pkl  ="/eos/user/a/apuglia/TROTA/TROTA2022/pkls/training_dataset_1_pt_cut_600_reduced.pkl"
+path_pkl  ="/eos/user/a/apuglia/TROTA/TROTA2024/pkls/training_dataset_1_pt_cut_600_reduced.pkl"
 with open(path_pkl, 'rb') as file:
     data = pkl.load(file)
 print(data.keys())

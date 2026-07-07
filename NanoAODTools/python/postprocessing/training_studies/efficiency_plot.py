@@ -5,7 +5,7 @@ import array
 
 usage                   = 'python3 efficiency_cal.py'
 parser                  = optparse.OptionParser(usage)
-parser.add_option('-f', '--folder'     , dest='folder'     , type=str, default='TROTA/TROTA2024/studies_training', help='folder with the histos'             )
+parser.add_option('-f', '--folder'     , dest='folder'     , type=str, default='TROTA/TROTA2022/studies_training', help='folder with the histos'             )
 # parser.add_option('-r', '--region'     , dest='region'     , type=str, default='SRTopMix'                     , help='region to calculate the efficiency' )
 # parser.add_option('-v', '--variable'   , dest='variable'   , type=str, default='PuppMET_pt'                , help='variable to use'                    )
 # parser.add_option('-d', '--denominator', dest='denominator', type=str, default='SR'                         , help='region to do the efficiency'        )

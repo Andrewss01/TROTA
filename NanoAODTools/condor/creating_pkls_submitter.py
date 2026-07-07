@@ -2,6 +2,7 @@ import os
 import sys
 import time
 from tqdm import tqdm
+import json
 import optparse
 # from PhysicsTools.NanoAODTools.postprocessing.modules.common.checkjobs import find_folder
 import subprocess
@@ -26,7 +27,7 @@ inituser = str(os.environ.get('USER')[0])
 usage = 'python3 creating_pkls_submitter.py -d inFile'
 parser = optparse.OptionParser(usage)
 parser.add_option('-d'   , '--dataset'   , dest='dataset'  , type=str   , default=None ,   help ='dataset to run '         )
-# parser.add_option( '--nfiles'    , dest='nfiles'   , type=int   , default=1    ,   help= 'n file to run'           )
+parser.add_option('-j'   , '--json'      , dest='json'     , type=str   , default='../python/postprocessing/samples/dict_samples_trainings_2024.json' )
 parser.add_option('-n'  , '--nevents'   , dest='nevents'  , type=int   , default=-1   ,   help='number of events to run, -1 means all events'  )
 parser.add_option('--tier', dest='tier', type=str, default = 'bari', help='Please enter location where to write the output file (tier pisa or bari)')
 parser.add_option( '--path_pkl' , dest='path_pkl' , type=str   , default="/eos/user/a/apuglia/TROTA/TROTA2024/pkls" ,   help='path to save pkl file'    )
@@ -36,6 +37,7 @@ parser.add_option('-v'   , '--verbose'   , dest='verbose'  , action='store_true'
 parser.add_option('-t', '--tier_folder', dest='tier_folder', type=str, default='TROTA2024/Training_samples', help='folder on the tier with the samples')
 parser.add_option('--pfc', dest='pfc', action = 'store_true', default = False)
 parser.add_option('--sv', dest='sv', action ='store_true', default = False)
+parser.add_option('-s', dest='start', default = 0, type = int)
 
 (opt, args) = parser.parse_args()
 
@@ -50,7 +52,23 @@ path_pkl    = opt.path_pkl
 tier_folder = opt.tier_folder
 pfc         = opt.pfc
 sv          = opt.sv
-n_files = 1
+json_file   = opt.json
+start_file  = opt.start
+
+
+sig, bkg = ["TT", "Tprime", "TW"],["QCD", "ZJets", "WJets"]
+if any(x in dataset for x in sig):
+    n_files =1 
+elif any(x in dataset for x in bkg):
+    n_files = 1 
+else:
+    print("errors dataset not mapped")
+    sys.exit(1)
+
+if start_file != 0:
+    end_file = start_file + n_files
+else:
+    end_file = n_files
 username = str(os.environ.get('USER'))
 inituser = str(os.environ.get('USER')[0])
 uid      = int(os.getuid())
@@ -85,7 +103,9 @@ else:
     print("Please select a valid tier (pisa or bari) OTHERWISE add the correct redirector in the code")
     exit()
 
-
+#### LOAD samples.py ####
+with open(json_file, "rb") as sample_file:
+    json_samples = json.load(sample_file)
 
 
 def sub_writer(folder = './', label = None):
@@ -130,10 +150,10 @@ def runner_writer(folder, label, path_file, component, path_to_pkl, year, n_even
     # elif pfc and sv:
     #     f.write(f"python3 trainingSet_PF_to_pkl.py -c "+component+" -i "+path_file+" --path_pkls "+path_to_pkl+".pkl  -n "+str(n_events)+" --pt_cut "+str(pt_cut)+" -y "+str(year)+" --num_pfcs "+str(num_pfc)+" -v "+str(verbose)+" --pfc --sv \n")
 
-
 for sample in samples: 
     sample_label = sample.label
     sample_year  = sample.year 
+    dataset_label = sample_dict[dataset].label
 
 
   
@@ -152,12 +172,14 @@ for sample in samples:
 
     # path_pkl =  +"/" + sample_label + "/"
     path_pkl_dir = path_pkl+ "/" +sample_label+"/"
+
     if not os.path.exists(path_pkl_dir):
         os.makedirs(path_pkl_dir)
     
-    for idx in range(0,n_files): 
+    for idx in range(start_file, end_file): 
         # if tier_folder == "Run3Analysis_Tprime":
-        path_file = redirector + "/store/user/" + username +"/"+folder_tier+"/tree_hadd_"+str(idx)+".root"
+        path_file = json_samples[dataset_label][sample_label]["strings"][idx]
+        # path_file = redirector + "/store/user/" + username +"/"+folder_tier+"/tree_hadd_"+str(idx)+".root"
         print('processing file: ', path_file)
         
         component = sample_label[:-4] + str(idx)

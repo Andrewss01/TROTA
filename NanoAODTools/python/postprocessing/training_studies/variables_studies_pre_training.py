@@ -10,7 +10,7 @@ import os
 
 JET_VARS = {
     "2018": ["area", "btagDeepB",      "deltaEta", "mass", "deltaPhi", "pt", "deltaPhiFatJet", "deltaEtaFatJet"],
-    "2022": ["area", "btagDeepFlavB",  "deltaEta", "mass", "deltaPhi", "pt", "deltaPhiFatJet", "deltaEtaFatJet"],
+    "2022": ["area", "btagPNetB",  "deltaEta", "mass", "deltaPhi", "pt", "deltaPhiFatJet", "deltaEtaFatJet"],
     "2024": ["area", "btagUParTAK4B",  "deltaEta", "mass", "deltaPhi", "pt", "deltaPhiFatJet", "deltaEtaFatJet"],
 }
 
@@ -19,12 +19,9 @@ FATJET_VARS = {
              "deepTag_QCD", "deepTag_QCDothers", "deepTag_TvsQCD", "deepTag_WvsQCD",
              "eta", "mass", "phi", "pt"],
     "2022": ["area", "btagDeepB", "particleNetWithMass_TvsQCD", "particleNetWithMass_WvsQCD",
-             "particleNet_QCD", "particleNetWithMass_QCD", "particleNet_XbbVsQCD", "particleNet_XqqVsQCD",
+              "particleNetWithMass_QCD","eta", "mass", "phi", "pt"],
+    "2024": ["area", "globalParT3_Xbb", "globalParT3_QCD", "globalParT3_withMassTopvsQCD", "globalParT3_withMassWvsQCD",
              "eta", "mass", "phi", "pt"],
-    "2024": ["area", "globalParT3_Xbb", "particleNetWithMass_TvsQCD", "particleNetWithMass_WvsQCD",
-             "particleNet_QCD", "particleNetWithMass_QCD", "particleNet_XbbVsQCD", "particleNet_XqqVsQCD",
-             "eta", "mass", "phi", "pt",
-             "globalParT3_TopbWev", "globalParT3_TopbWmv", "globalParT3_TopbWqq"],
 }
 
 TOP_VARS = {
@@ -72,9 +69,13 @@ def classify_sample(sample_name):
         return "TT"
     elif "TT_dilep" in sample_name:
         return "TT"
+    elif "TbarWplus" in sample_name or "TWminus" in sample_name:
+        return "TT"
     elif "QCD" in sample_name:
         return "QCD"
     elif "ZJ" in sample_name:
+        return "QCD"
+    elif "WJets" in sample_name:
         return "QCD"
     else:
         return None

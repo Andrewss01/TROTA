@@ -82,7 +82,7 @@ label =launchtime
 if year == 2024:
     folder = '/afs/cern.ch/user/a/apuglia/CMSSW_14_1_8/src/PhysicsTools/NanoAODTools/condor/tmp/trainings/'+name+'_trota_24_'+pfc_sv+top_type+'_'+label+'/'
     in_file = '/eos/user/a/apuglia/TROTA/TROTA2024/pkls/training_dataset_1_pt_cut_600.pkl' #file su cui girare la grid search  
-    components = 'QCD_HT1000to1200_0,QCD_HT100to200_0,QCD_HT1200to1500_0,QCD_HT1500to2000_0,QCD_HT2000_0,QCD_HT200to400_0,QCD_HT400to600_0,QCD_HT40to70_0,QCD_HT600to800_0,QCD_HT70to100_0,QCD_HT800to1000_0,TT_dilep_0,TT_hadr_0,TT_semilep_0,ZJetsToNuNu_HT100to200_0,ZJetsToNuNu_HT1500to2500_0,ZJetsToNuNu_HT200to400_0,ZJetsToNuNu_HT2500_0,ZJetsToNuNu_HT400to800_0,ZJetsToNuNu_HT800to1500_0'
+    components = 'QCD_HT1000to1200_0,QCD_HT100to200_0,QCD_HT1200to1500_0,QCD_HT1500to2000_0,QCD_HT2000_0,QCD_HT200to400_0,QCD_HT400to600_0,QCD_HT600to800_0,QCD_HT70to100_0,QCD_HT800to1000_0,TT_dilep_0,TT_dilep_1,TT_hadr_0,TT_semilep_0,TT_semilep_1,TWminusto2L2Nu_0,TWminusto2L2Nu_1,TWminusto4Q_0,TWminusto4Q_1,TWminustoLNu2Q_0,TWminustoLNu2Q_1,TbarWplusto2L2Nu_0,TbarWplusto2L2Nu_1,TbarWplusto4Q_0,TbarWplusto4Q_1,TbarWplustoLNu2Q_0,TbarWplustoLNu2Q_1,WJets_4Jets_1J_0,WJets_4Jets_2J_0,WJets_4Jets_3J_0,WJets_4Jets_4J_0,ZJetsToNuNu_HT100to200_0,ZJetsToNuNu_HT1500to2500_0,ZJetsToNuNu_HT200to400_0,ZJetsToNuNu_HT2500_0,ZJetsToNuNu_HT400to800_0,ZJetsToNuNu_HT800to1500_0'
 #cambiare le componnenti
 elif year == 2022:
     folder = '/afs/cern.ch/user/a/apuglia/CMSSW_14_1_8/src/PhysicsTools/NanoAODTools/condor/tmp/trainings/'+name+'_trota_22_'+pfc_sv+top_type+'_'+label+'/'

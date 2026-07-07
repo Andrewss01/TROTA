@@ -684,5 +684,349 @@
         40189
       ]
     }
+  },
+  "TW_2024": {
+    "TWminustoLNu2Q_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TWminustoLNu2Q_2024/20260625_184354/tree_hadd_3.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TWminustoLNu2Q_2024/20260625_184354/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TWminustoLNu2Q_2024/20260625_184354/tree_hadd_1.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TWminustoLNu2Q_2024/20260625_184354/tree_hadd_4.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TWminustoLNu2Q_2024/20260625_184354/tree_hadd_2.root"
+      ],
+      "ntot": [
+        1147,
+        4089,
+        4111,
+        4210,
+        4244
+      ]
+    },
+    "TWminusto4Q_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TWminusto4Q_2024/20260625_184354/tree_hadd_3.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TWminusto4Q_2024/20260625_184354/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TWminusto4Q_2024/20260625_184354/tree_hadd_1.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TWminusto4Q_2024/20260625_184354/tree_hadd_4.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TWminusto4Q_2024/20260625_184354/tree_hadd_2.root"
+      ],
+      "ntot": [
+        9511,
+        14450,
+        9146,
+        14511,
+        12194
+      ]
+    },
+    "TWminusto2L2Nu_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TWminusto2L2Nu_2024/20260625_184354/tree_hadd_3.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TWminusto2L2Nu_2024/20260625_184354/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TWminusto2L2Nu_2024/20260625_184354/tree_hadd_1.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TWminusto2L2Nu_2024/20260625_184354/tree_hadd_4.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TWminusto2L2Nu_2024/20260625_184354/tree_hadd_2.root"
+      ],
+      "ntot": [
+        40802,
+        48699,
+        40802,
+        43961,
+        40012
+      ]
+    },
+    "TbarWplustoLNu2Q_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TbarWplustoLNu2Q_2024/20260625_184354/tree_hadd_3.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TbarWplustoLNu2Q_2024/20260625_184354/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TbarWplustoLNu2Q_2024/20260625_184354/tree_hadd_1.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TbarWplustoLNu2Q_2024/20260625_184354/tree_hadd_4.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TbarWplustoLNu2Q_2024/20260625_184354/tree_hadd_2.root"
+      ],
+      "ntot": [
+        6092,
+        4,
+        4816,
+        5084,
+        794
+      ]
+    },
+    "TbarWplusto4Q_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TbarWplusto4Q_2024/20260625_184354/tree_hadd_3.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TbarWplusto4Q_2024/20260625_184354/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TbarWplusto4Q_2024/20260625_184354/tree_hadd_1.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TbarWplusto4Q_2024/20260625_184354/tree_hadd_4.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TbarWplusto4Q_2024/20260625_184354/tree_hadd_2.root"
+      ],
+      "ntot": [
+        16005,
+        8094,
+        11015,
+        10041,
+        10832
+      ]
+    },
+    "TbarWplusto2L2Nu_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TbarWplusto2L2Nu_2024/20260625_184354/tree_hadd_3.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TbarWplusto2L2Nu_2024/20260625_184354/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TbarWplusto2L2Nu_2024/20260625_184354/tree_hadd_1.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TbarWplusto2L2Nu_2024/20260625_184354/tree_hadd_4.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TbarWplusto2L2Nu_2024/20260625_184354/tree_hadd_2.root"
+      ],
+      "ntot": [
+        73044,
+        60958,
+        61221,
+        41252,
+        58593
+      ]
+    }
+  },
+  "TWminustoLNu2Q_2024": {
+    "TWminustoLNu2Q_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TWminustoLNu2Q_2024/20260625_184354/tree_hadd_3.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TWminustoLNu2Q_2024/20260625_184354/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TWminustoLNu2Q_2024/20260625_184354/tree_hadd_1.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TWminustoLNu2Q_2024/20260625_184354/tree_hadd_4.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TWminustoLNu2Q_2024/20260625_184354/tree_hadd_2.root"
+      ],
+      "ntot": [
+        1147,
+        4089,
+        4111,
+        4210,
+        4244
+      ]
+    }
+  },
+  "TWminusto4Q_2024": {
+    "TWminusto4Q_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TWminusto4Q_2024/20260625_184354/tree_hadd_3.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TWminusto4Q_2024/20260625_184354/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TWminusto4Q_2024/20260625_184354/tree_hadd_1.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TWminusto4Q_2024/20260625_184354/tree_hadd_4.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TWminusto4Q_2024/20260625_184354/tree_hadd_2.root"
+      ],
+      "ntot": [
+        9511,
+        14450,
+        9146,
+        14511,
+        12194
+      ]
+    }
+  },
+  "TWminusto2L2Nu_2024": {
+    "TWminusto2L2Nu_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TWminusto2L2Nu_2024/20260625_184354/tree_hadd_3.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TWminusto2L2Nu_2024/20260625_184354/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TWminusto2L2Nu_2024/20260625_184354/tree_hadd_1.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TWminusto2L2Nu_2024/20260625_184354/tree_hadd_4.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TWminusto2L2Nu_2024/20260625_184354/tree_hadd_2.root"
+      ],
+      "ntot": [
+        40802,
+        48699,
+        40802,
+        43961,
+        40012
+      ]
+    }
+  },
+  "TbarWplustoLNu2Q_2024": {
+    "TbarWplustoLNu2Q_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TbarWplustoLNu2Q_2024/20260625_184354/tree_hadd_3.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TbarWplustoLNu2Q_2024/20260625_184354/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TbarWplustoLNu2Q_2024/20260625_184354/tree_hadd_1.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TbarWplustoLNu2Q_2024/20260625_184354/tree_hadd_4.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TbarWplustoLNu2Q_2024/20260625_184354/tree_hadd_2.root"
+      ],
+      "ntot": [
+        6092,
+        4,
+        4816,
+        5084,
+        794
+      ]
+    }
+  },
+  "TbarWplusto4Q_2024": {
+    "TbarWplusto4Q_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TbarWplusto4Q_2024/20260625_184354/tree_hadd_3.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TbarWplusto4Q_2024/20260625_184354/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TbarWplusto4Q_2024/20260625_184354/tree_hadd_1.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TbarWplusto4Q_2024/20260625_184354/tree_hadd_4.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TbarWplusto4Q_2024/20260625_184354/tree_hadd_2.root"
+      ],
+      "ntot": [
+        16005,
+        8094,
+        11015,
+        10041,
+        10832
+      ]
+    }
+  },
+  "TbarWplusto2L2Nu_2024": {
+    "TbarWplusto2L2Nu_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TbarWplusto2L2Nu_2024/20260625_184354/tree_hadd_3.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TbarWplusto2L2Nu_2024/20260625_184354/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TbarWplusto2L2Nu_2024/20260625_184354/tree_hadd_1.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TbarWplusto2L2Nu_2024/20260625_184354/tree_hadd_4.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/TbarWplusto2L2Nu_2024/20260625_184354/tree_hadd_2.root"
+      ],
+      "ntot": [
+        73044,
+        60958,
+        61221,
+        41252,
+        58593
+      ]
+    }
+  },
+  "WJets_4Jets_2024": {
+    "WJets_4Jets_1J_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/WJets_4Jets_1J_2024/20260625_185408/tree_hadd_3.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/WJets_4Jets_1J_2024/20260625_185408/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/WJets_4Jets_1J_2024/20260625_185408/tree_hadd_1.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/WJets_4Jets_1J_2024/20260625_185408/tree_hadd_4.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/WJets_4Jets_1J_2024/20260625_185408/tree_hadd_2.root"
+      ],
+      "ntot": [
+        5,
+        5,
+        5,
+        5,
+        4
+      ]
+    },
+    "WJets_4Jets_2J_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/WJets_4Jets_2J_2024/20260625_185408/tree_hadd_3.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/WJets_4Jets_2J_2024/20260625_185408/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/WJets_4Jets_2J_2024/20260625_185408/tree_hadd_1.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/WJets_4Jets_2J_2024/20260625_185408/tree_hadd_4.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/WJets_4Jets_2J_2024/20260625_185408/tree_hadd_2.root"
+      ],
+      "ntot": [
+        8,
+        8,
+        8,
+        8,
+        8
+      ]
+    },
+    "WJets_4Jets_3J_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/WJets_4Jets_3J_2024/20260625_185408/tree_hadd_3.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/WJets_4Jets_3J_2024/20260625_185408/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/WJets_4Jets_3J_2024/20260625_185408/tree_hadd_1.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/WJets_4Jets_3J_2024/20260625_185408/tree_hadd_4.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/WJets_4Jets_3J_2024/20260625_185408/tree_hadd_2.root"
+      ],
+      "ntot": [
+        13,
+        12,
+        12,
+        12,
+        12
+      ]
+    },
+    "WJets_4Jets_4J_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/WJets_4Jets_4J_2024/20260625_185408/tree_hadd_3.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/WJets_4Jets_4J_2024/20260625_185408/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/WJets_4Jets_4J_2024/20260625_185408/tree_hadd_1.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/WJets_4Jets_4J_2024/20260625_185408/tree_hadd_4.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/WJets_4Jets_4J_2024/20260625_185408/tree_hadd_2.root"
+      ],
+      "ntot": [
+        4,
+        8,
+        5,
+        17,
+        16
+      ]
+    }
+  },
+  "WJets_4Jets_1J_2024": {
+    "WJets_4Jets_1J_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/WJets_4Jets_1J_2024/20260625_185408/tree_hadd_3.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/WJets_4Jets_1J_2024/20260625_185408/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/WJets_4Jets_1J_2024/20260625_185408/tree_hadd_1.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/WJets_4Jets_1J_2024/20260625_185408/tree_hadd_4.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/WJets_4Jets_1J_2024/20260625_185408/tree_hadd_2.root"
+      ],
+      "ntot": [
+        5,
+        5,
+        5,
+        5,
+        4
+      ]
+    }
+  },
+  "WJets_4Jets_2J_2024": {
+    "WJets_4Jets_2J_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/WJets_4Jets_2J_2024/20260625_185408/tree_hadd_3.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/WJets_4Jets_2J_2024/20260625_185408/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/WJets_4Jets_2J_2024/20260625_185408/tree_hadd_1.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/WJets_4Jets_2J_2024/20260625_185408/tree_hadd_4.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/WJets_4Jets_2J_2024/20260625_185408/tree_hadd_2.root"
+      ],
+      "ntot": [
+        8,
+        8,
+        8,
+        8,
+        8
+      ]
+    }
+  },
+  "WJets_4Jets_3J_2024": {
+    "WJets_4Jets_3J_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/WJets_4Jets_3J_2024/20260625_185408/tree_hadd_3.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/WJets_4Jets_3J_2024/20260625_185408/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/WJets_4Jets_3J_2024/20260625_185408/tree_hadd_1.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/WJets_4Jets_3J_2024/20260625_185408/tree_hadd_4.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/WJets_4Jets_3J_2024/20260625_185408/tree_hadd_2.root"
+      ],
+      "ntot": [
+        13,
+        12,
+        12,
+        12,
+        12
+      ]
+    }
+  },
+  "WJets_4Jets_4J_2024": {
+    "WJets_4Jets_4J_2024": {
+      "strings": [
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/WJets_4Jets_4J_2024/20260625_185408/tree_hadd_3.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/WJets_4Jets_4J_2024/20260625_185408/tree_hadd_0.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/WJets_4Jets_4J_2024/20260625_185408/tree_hadd_1.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/WJets_4Jets_4J_2024/20260625_185408/tree_hadd_4.root",
+        "davs://webdav.recas.ba.infn.it:8443/cms/store/user/apuglia/TROTA2024/Training_samples/WJets_4Jets_4J_2024/20260625_185408/tree_hadd_2.root"
+      ],
+      "ntot": [
+        4,
+        8,
+        5,
+        17,
+        16
+      ]
+    }
   }
 }

@@ -10,7 +10,7 @@ import argparse
 #year   = args.year
 
 
-path_to_training_folder = '/eos/user/a/apuglia/TROTA/TROTA2024/dataset'
+path_to_training_folder = '/eos/user/a/apuglia/TROTA/TROTA2024/pkls/dataset_reduced'
 
 # path_to_pkl_folder          = "{}/training_dataset_pt_cut_600".format(path_to_training_folder)
 dataset                     = {}

@@ -98,14 +98,16 @@ for c_todrop in components_todrop:
 
 def multi_score(dataset):
     multi_output = []
+    SIGNALS =  ["TT", "TW", "TbarW","Tprime"]
+    BACKGROUND = ["WJets", "ZJets", "QCD"]
     for c in samples:
         for cat in categories:
             for j in dataset[c][cat][3]:
-                if j == 0 and ('TT' in c or 'tt' in c or 'Tprime' in c):      #False tops : 0 
+                if j == 0 and any(x in c for x in SIGNALS):      #False tops : 0 
                     multi_output.append([0])  
-                elif j == 1 and ('TT' in c or 'tt' in c or 'Tprime' in c):    #True tops : 1
+                elif j == 1 and (x in c for x in SIGNALS):    #True tops : 1
                     multi_output.append([1])
-                elif 'ZJ' in c or 'zj' in c or 'QCD' in c:
+                elif (x in c for x in BACKGROUND):
                     multi_output.append([2])
     y = np.concatenate([multi_output])
     return y
