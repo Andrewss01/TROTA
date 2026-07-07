@@ -43,7 +43,7 @@ os.popen("cp /tmp/x509up_u" + str(uid) + " /afs/cern.ch/user/" + inituser + "/" 
 
 # insert here the name of output folder
 running_folder                      = os.environ.get('PWD') #+ "/tmp/"
-remote_folder_name                  = "TROTA2024/Eval_Samples"
+remote_folder_name                  = "TROTA2024/Eval_samples"
  
 def get_files_on_tier(folder, cert_path, ca_path):
     try:

@@ -144,7 +144,7 @@ for sample in samples:
         fatjet_ID_mod = f'fatjetid_{year}()'
 
         print("Producing crab configuration file")
-        cfg_writer(label, sample.dataset, isData, year, "TROTA2024/Eval_Samples")
+        cfg_writer(label, sample.dataset, isData, year, "TROTA2024/Eval_samples")
 
         if isData:
             modules = f"{met_hlt_mod}, {jet_ID_mod}, {fatjet_ID_mod},preselection(), nanoTopcand_PFC_SV(year = {year}, isMC =0), nanoTopevaluate_MultiClass(year = {year},isMC = 0, modelMix_path = '{modelMix_path}', modelRes_path = '{modelRes_path}') " # Put here all the modules you want to be run by crab
