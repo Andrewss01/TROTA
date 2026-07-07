@@ -4310,7 +4310,7 @@ sample_dict = {
     "DataEGammaD1_0_2023postBPix" : DataEGammaD1_0_2023postBPix, "DataEGammaD1_1_2023postBPix" : DataEGammaD1_1_2023postBPix,
     "DataEGammaD2_0_2023postBPix" : DataEGammaD2_0_2023postBPix, "DataEGammaD2_1_2023postBPix" : DataEGammaD2_1_2023postBPix,
     "DataEGamma_2023postBPix" : DataEGamma_2023postBPix,
-<<<<<<< HEAD
+    
  ##########################2024#################################
     "TT_2024": TT_2024, 
     "TT_dilep_2024": TT_dilep_2024, "TT_hadr_2024": TT_hadr_2024, "TT_semilep_2024": TT_semilep_2024, 
