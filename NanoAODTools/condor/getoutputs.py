@@ -152,45 +152,34 @@ for sample in samples:
             try:
                 rootfile = ROOT.TFile.Open(f)
                 out_strings.append(f)
-                dir_ = rootfile.Get("plots")
-                h_genweight = dir_.Get("h_genweight")
-                # runstree = rootfile.Get("Runs")
-                n = int(h_genweight.GetBinContent(1))
-                # runstree.GetEntry(0)
-                # geneventSumw = runstree.genEventSumw
-                # tree = rootfile.Get("Events")
-                # tree.GetEntry(0)
-                # eventweight = abs(tree.Generator_weight)
-                # n = round(abs(geneventSumw/eventweight))
+                
+                runstree = rootfile.Get("Runs")
+                
+                runstree.GetEntry(0)
+                if sample.year == 2024:
+                    geneventSumw = runstree.genEventCount
+                else:
+                    geneventSumw = runstree.genEventSumw
+                tree = rootfile.Get("Events")
+                tree.GetEntry(0)
+                eventweight = abs(tree.Generator_weight)
+                n = round(abs(geneventSumw/eventweight))
                 ntot.append(n)
             except:
                 print("Could not open file: ", f)
+                dir_ = rootfile.Get("plots")
+                h_genweight = dir_.Get("h_genweight")
+                n = int(h_genweight.GetBinContent(1))
                 # n = rootfile.Get('Events').GetEntries()
                 # n = None
-                ntot.append(None)
-                continue
+                ntot.append(n)
+               
             # histo = rootfile.Get("plots/h_genweight")
             # ntot.append(histo.GetBinContent(2))
         else:
-            try:
-                rootfile = ROOT.TFile.Open(f)
-                out_strings.append(f)
-                dir_ = rootfile.Get("plots")
-                h_genweight = dir_.Get("h_genweight")
-                n = int(h_genweight.GetBinContent(1))
-                # print('n is: ', n)
-                # runstree = rootfile.Get("Runs")
-                # runstree.GetEntry(0)
-                # geneventSumw = runstree.genEventSumw
-                # tree = rootfile.Get("Events")
-                # tree.GetEntry(0)
-                # eventweight = abs(tree.Generator_weight)
-                # n = round(abs(geneventSumw/eventweight))
-                ntot.append(n)
-            except:
-                print("Could not open file: ", f)
-                ntot.append(None)
-                continue
+            out_strings.append(f)
+            ntot.append(None)
+            
     if hasattr(sample, "process"):
         out_dict[sample.process][sample.label] = {'strings': out_strings, "ntot": ntot}
         json_out[sample.process][sample.label] = out_dict[sample.process][sample.label]

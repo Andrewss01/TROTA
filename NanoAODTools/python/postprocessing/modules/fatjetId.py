@@ -62,3 +62,10 @@ class fatjetId(Module):
 
         self.out.fillBranch("FatJet_jetId", jet_Ids)
         return True
+
+JME_repo = "/cvmfs/cms-griddata.cern.ch/cat/metadata/JME/"
+fatjetid_2022 = lambda:   fatjetId(f"{JME_repo}Run3-22CDSep23-Summer22-NanoAODv12/latest/jetid.json.gz")
+fatjetid_2022EE = lambda: fatjetId(f"{JME_repo}Run3-22EFGSep23-Summer22EE-NanoAODv12/latest/jetid.json.gz")
+fatjetid_2023 = lambda:   fatjetId(f"{JME_repo}Run3-23CSep23-Summer23-NanoAODv12/latest/jetid.json.gz")
+fatjetid_2023BP = lambda: fatjetId(f"{JME_repo}Run3-23DSep23-Summer23BPix-NanoAODv12/latest/jetid.json.gz")
+fatjetid_2024 = lambda:   fatjetId(f"{JME_repo}Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/latest/jetid.json.gz")

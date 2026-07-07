@@ -5,7 +5,7 @@ import re
 import PSet
 
 
-def inputFiles(): 
+def inputFiles():
     print("ARGV: " + str(sys.argv))
     JobNumber = sys.argv[1]
     crabFiles = PSet.process.source.fileNames
