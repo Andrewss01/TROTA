@@ -83,7 +83,7 @@ def fill_fj(fj_dnn, fj, idx_top):
         fj_dnn[idx_top, 9]  = fj.mass
         fj_dnn[idx_top, 10] = fj.phi
         fj_dnn[idx_top, 11] = fj.pt
-    elif year==2022: 
+    elif year in [2022,2023]: 
         fj_dnn[idx_top, 0]  = fj.area
         fj_dnn[idx_top, 1]  = fj.btagDeepB
         fj_dnn[idx_top, 2]  = fj.particleNetWithMass_QCD
@@ -114,89 +114,41 @@ def fill_fj(fj_dnn, fj, idx_top):
         # fj_dnn[idx_top, 14]  = fj.globalParT3_TopbWqq
     return fj_dnn
 
-def fill_jets(jets_dnn, j0, j1, j2, sumjet, fj_phi, fj_eta, idx_top): 
+def fill_jets(jets_dnn, j0, j1, j2, sumjet, fj_phi, fj_eta, idx_top, year): 
+    if year in [2018]:
+        jet_btagdiscr = "btagDeepB"
+    elif year in [2022,2023]:
+        jet_btagdiscr = "btagPNetB"
+    elif year in [2024]:
+        jet_btagdiscr = "btagUParTAK4B"
+
+    jets_dnn[idx_top, 0, 0] = j0.area
+    jets_dnn[idx_top, 0, 1] = getattr(j0, jet_btagdiscr)
+    jets_dnn[idx_top, 0, 2] = deltaEta(j0.eta, sumjet.Eta())#j0.#delta eta 3jets-jet
+    jets_dnn[idx_top, 0, 3] = j0.mass
+    jets_dnn[idx_top, 0, 4] = deltaPhi(j0.phi, sumjet.Phi())#j0.#delta phi 3jets-jet
+    jets_dnn[idx_top, 0, 5] = j0.pt
+    jets_dnn[idx_top, 0, 6] = deltaPhi(j0.phi, fj_phi)#j0.#deltaphi fj-jet
+    jets_dnn[idx_top, 0, 7] = deltaEta(j0.eta, fj_eta)#j0.#deltaeta fj-jet
+
+    jets_dnn[idx_top, 1, 0] = j1.area
+    jets_dnn[idx_top, 1, 1] = getattr(j1, jet_btagdiscr)
+    jets_dnn[idx_top, 1, 2] = deltaEta(j1.eta, sumjet.Eta())
+    jets_dnn[idx_top, 1, 3] = j1.mass
+    jets_dnn[idx_top, 1, 4] = deltaPhi(j1.phi, sumjet.Phi())
+    jets_dnn[idx_top, 1, 5] = j1.pt
+    jets_dnn[idx_top, 1, 6] = deltaPhi(j1.phi, fj_phi)
+    jets_dnn[idx_top, 1, 7] = deltaEta(j1.eta, fj_eta)
+    if hasattr(j2,"pt"):
+        jets_dnn[idx_top, 2, 0] = j2.area
+        jets_dnn[idx_top, 2, 1] = getattr(j2, jet_btagdiscr)
+        jets_dnn[idx_top, 2, 2] = deltaEta(j2.eta, sumjet.Eta())#j2.#delta eta fj-jet
+        jets_dnn[idx_top, 2, 3] = j2.mass
+        jets_dnn[idx_top, 2, 4] = deltaPhi(j2.phi, sumjet.Phi())#j2.#delta phi fatjet-jet
+        jets_dnn[idx_top, 2, 5] = j2.pt
+        jets_dnn[idx_top, 2, 6] = deltaPhi(j2.phi, fj_phi)
+        jets_dnn[idx_top, 2, 7] = deltaEta(j2.eta, fj_eta)
     
-    if year==2018:
-        jets_dnn[idx_top, 0, 0] = j0.area
-        jets_dnn[idx_top, 0, 1] = j0.btagDeepB
-        jets_dnn[idx_top, 0, 2] = deltaEta(j0.eta, sumjet.Eta())#j0.#delta eta 3jets-jet
-        jets_dnn[idx_top, 0, 3] = j0.mass
-        jets_dnn[idx_top, 0, 4] = deltaPhi(j0.phi, sumjet.Phi())#j0.#delta phi 3jets-jet
-        jets_dnn[idx_top, 0, 5] = j0.pt
-        jets_dnn[idx_top, 0, 6] = deltaPhi(j0.phi, fj_phi)#j0.#deltaphi fj-jet
-        jets_dnn[idx_top, 0, 7] = deltaEta(j0.eta, fj_eta)#j0.#deltaeta fj-jet
-        
-        jets_dnn[idx_top, 1, 0] = j1.area
-        jets_dnn[idx_top, 1, 1] = j1.btagDeepB
-        jets_dnn[idx_top, 1, 2] = deltaEta(j1.eta, sumjet.Eta())
-        jets_dnn[idx_top, 1, 3] = j1.mass
-        jets_dnn[idx_top, 1, 4] = deltaPhi(j1.phi, sumjet.Phi())
-        jets_dnn[idx_top, 1, 5] = j1.pt
-        jets_dnn[idx_top, 1, 6] = deltaPhi(j1.phi, fj_phi)
-        jets_dnn[idx_top, 1, 7] = deltaEta(j1.eta, fj_eta)
-        if hasattr(j2,"pt"):
-            jets_dnn[idx_top, 2, 0] = j2.area
-            jets_dnn[idx_top, 2, 1] = j2.btagDeepB
-            jets_dnn[idx_top, 2, 2] = deltaEta(j2.eta, sumjet.Eta())#j2.#delta eta fj-jet
-            jets_dnn[idx_top, 2, 3] = j2.mass
-            jets_dnn[idx_top, 2, 4] = deltaPhi(j2.phi, sumjet.Phi())#j2.#delta phi fatjet-jet
-            jets_dnn[idx_top, 2, 5] = j2.pt
-            jets_dnn[idx_top, 2, 6] = deltaPhi(j2.phi, fj_phi)
-            jets_dnn[idx_top, 2, 7] = deltaEta(j2.eta, fj_eta)
-    elif year==2022:
-        jets_dnn[idx_top, 0, 0] = j0.area
-        jets_dnn[idx_top, 0, 1] = j0.btagPNetB
-        jets_dnn[idx_top, 0, 2] = deltaEta(j0.eta, sumjet.Eta())#j0.#delta eta 3jets-jet
-        jets_dnn[idx_top, 0, 3] = j0.mass
-        jets_dnn[idx_top, 0, 4] = deltaPhi(j0.phi, sumjet.Phi())#j0.#delta phi 3jets-jet
-        jets_dnn[idx_top, 0, 5] = j0.pt
-        jets_dnn[idx_top, 0, 6] = deltaPhi(j0.phi, fj_phi)#j0.#deltaphi fj-jet
-        jets_dnn[idx_top, 0, 7] = deltaEta(j0.eta, fj_eta)#j0.#deltaeta fj-jet
-        
-        jets_dnn[idx_top, 1, 0] = j1.area
-        jets_dnn[idx_top, 1, 1] = j1.btagPNetB
-        jets_dnn[idx_top, 1, 2] = deltaEta(j1.eta, sumjet.Eta())
-        jets_dnn[idx_top, 1, 3] = j1.mass
-        jets_dnn[idx_top, 1, 4] = deltaPhi(j1.phi, sumjet.Phi())
-        jets_dnn[idx_top, 1, 5] = j1.pt
-        jets_dnn[idx_top, 1, 6] = deltaPhi(j1.phi, fj_phi)
-        jets_dnn[idx_top, 1, 7] = deltaEta(j1.eta, fj_eta)
-        if hasattr(j2,"pt"):
-            jets_dnn[idx_top, 2, 0] = j2.area
-            jets_dnn[idx_top, 2, 1] = j2.btagPNetB
-            jets_dnn[idx_top, 2, 2] = deltaEta(j2.eta, sumjet.Eta())#j2.#delta eta fj-jet
-            jets_dnn[idx_top, 2, 3] = j2.mass
-            jets_dnn[idx_top, 2, 4] = deltaPhi(j2.phi, sumjet.Phi())#j2.#delta phi fatjet-jet
-            jets_dnn[idx_top, 2, 5] = j2.pt
-            jets_dnn[idx_top, 2, 6] = deltaPhi(j2.phi, fj_phi)
-            jets_dnn[idx_top, 2, 7] = deltaEta(j2.eta, fj_eta)
-    elif year==2024:
-        jets_dnn[idx_top, 0, 0] = j0.area
-        jets_dnn[idx_top, 0, 1] = j0.btagUParTAK4B
-        jets_dnn[idx_top, 0, 2] = deltaEta(j0.eta, sumjet.Eta())#j0.#delta eta 3jets-jet
-        jets_dnn[idx_top, 0, 3] = j0.mass
-        jets_dnn[idx_top, 0, 4] = deltaPhi(j0.phi, sumjet.Phi())#j0.#delta phi 3jets-jet
-        jets_dnn[idx_top, 0, 5] = j0.pt
-        jets_dnn[idx_top, 0, 6] = deltaPhi(j0.phi, fj_phi)#j0.#deltaphi fj-jet
-        jets_dnn[idx_top, 0, 7] = deltaEta(j0.eta, fj_eta)#j0.#deltaeta fj-jet
-        
-        jets_dnn[idx_top, 1, 0] = j1.area
-        jets_dnn[idx_top, 1, 1] = j1.btagUParTAK4B
-        jets_dnn[idx_top, 1, 2] = deltaEta(j1.eta, sumjet.Eta())
-        jets_dnn[idx_top, 1, 3] = j1.mass
-        jets_dnn[idx_top, 1, 4] = deltaPhi(j1.phi, sumjet.Phi())
-        jets_dnn[idx_top, 1, 5] = j1.pt
-        jets_dnn[idx_top, 1, 6] = deltaPhi(j1.phi, fj_phi)
-        jets_dnn[idx_top, 1, 7] = deltaEta(j1.eta, fj_eta)
-        if hasattr(j2,"pt"):
-            jets_dnn[idx_top, 2, 0] = j2.area
-            jets_dnn[idx_top, 2, 1] = j2.btagUParTAK4B
-            jets_dnn[idx_top, 2, 2] = deltaEta(j2.eta, sumjet.Eta())#j2.#delta eta fj-jet
-            jets_dnn[idx_top, 2, 3] = j2.mass
-            jets_dnn[idx_top, 2, 4] = deltaPhi(j2.phi, sumjet.Phi())#j2.#delta phi fatjet-jet
-            jets_dnn[idx_top, 2, 5] = j2.pt
-            jets_dnn[idx_top, 2, 6] = deltaPhi(j2.phi, fj_phi)
-            jets_dnn[idx_top, 2, 7] = deltaEta(j2.eta, fj_eta)
     return jets_dnn
 
 def boost_PFC(pt_top,eta_top,phi_top,M_top,pt_PFC,eta_PFC,phi_PFC,M_PFC):
@@ -371,15 +323,14 @@ def process_batch(batch_indexes, inFile, component, categories, n_PFCs, year, pt
         elif year == 2022: 
             n_SVs = 3
             data_jets           = np.zeros((1,3,8))
-            data_fatjets        = np.zeros((1,12))
-            #mergia jet e fatjet e salvane sui 40 !!senza overlap e controlla l'ordinamento in pt eindice di distanza e se appatriene ejet fgj o entrambi
+            data_fatjets        = np.zeros((1,9))
             if pfc:
                 data_PFC         = np.zeros((1,n_PFCs,13)) #!! setta il masssimo delle 20 da prendere e andranno usate LSTM
             if sv:
                 data_SV          = np.zeros((1, n_SVs,12 ))
         elif year== 2024:
             data_jets        = np.zeros((1,3,8))
-            data_fatjets     = np.zeros((1, 15))
+            data_fatjets     = np.zeros((1, 9))
             if pfc:
                 data_PFC         = np.zeros((1, n_PFCs, 9))
         
@@ -429,12 +380,12 @@ def process_batch(batch_indexes, inFile, component, categories, n_PFCs, year, pt
                         fatjet_toappend         = np.zeros((1,12))
                     elif year==2022:
                         jet_toappend            = np.zeros((1,3,8))
-                        fatjet_toappend         = np.zeros((1,12))
+                        fatjet_toappend         = np.zeros((1,9))
                         PFC_toappend            = np.zeros((1,n_PFCs,13))
                         SVs_toappend            = np.zeros((1,n_SVs, 12))
                     elif year==2024:
                         jet_toappend            = np.zeros((1,3,8))
-                        fatjet_toappend         = np.zeros((1,15))
+                        fatjet_toappend         = np.zeros((1,9))
                         # PFC_toappend            = np.zeros((1,n_PFCs,9))
                     mass_toappend = np.zeros((1,3))
                     label_toappend = np.zeros((1,1))

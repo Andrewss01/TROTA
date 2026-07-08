@@ -49,19 +49,19 @@ def fill_fj(fj_dnn, fj, idx_top, year):
         fj_dnn[idx_top, 9]  = fj.mass
         fj_dnn[idx_top, 10] = fj.phi
         fj_dnn[idx_top, 11] = fj.pt
-    elif year==2022: 
+    elif year in [2022,2023]: 
         fj_dnn[idx_top, 0]  = fj.area
         fj_dnn[idx_top, 1]  = fj.btagDeepB
-        fj_dnn[idx_top, 2]  = fj.particleNetWithMass_TvsQCD
-        fj_dnn[idx_top, 3]  = fj.particleNetWithMass_WvsQCD
-        fj_dnn[idx_top, 4]  = fj.particleNet_QCD
-        fj_dnn[idx_top, 5]  = fj.particleNetWithMass_QCD 
-        fj_dnn[idx_top, 6]  = fj.particleNet_XbbVsQCD
-        fj_dnn[idx_top, 7]  = fj.particleNet_XqqVsQCD
-        fj_dnn[idx_top, 8]  = fj.eta
-        fj_dnn[idx_top, 9]  = fj.mass
-        fj_dnn[idx_top, 10]  = fj.phi
-        fj_dnn[idx_top, 11]  = fj.pt
+        fj_dnn[idx_top, 2]  = fj.particleNetWithMass_QCD
+        fj_dnn[idx_top, 3]  = fj.particleNetWithMass_TvsQCD
+        fj_dnn[idx_top, 4]  = fj.particleNetwithMass_WvsQCD
+        # fj_dnn[idx_top, 5]  = fj.particleNetWithMass_QCD 
+        # fj_dnn[idx_top, 6]  = fj.particleNet_XbbVsQCD
+        # fj_dnn[idx_top, 7]  = fj.particleNet_XqqVsQCD
+        fj_dnn[idx_top, 5]  = fj.eta
+        fj_dnn[idx_top, 6]  = fj.mass
+        fj_dnn[idx_top, 7]  = fj.phi
+        fj_dnn[idx_top, 8]  = fj.pt
     elif year==2024:
         fj_dnn[idx_top, 0]  = fj.area
         fj_dnn[idx_top, 1]  = fj.globalParT3_Xbb/ (fj.globalParT3_Xbb + fj.globalParT3_QCD)
@@ -82,88 +82,40 @@ def fill_fj(fj_dnn, fj, idx_top, year):
     return fj_dnn
 
 def fill_jets(jets_dnn, j0, j1, j2, sumjet, fj_phi, fj_eta, idx_top, year): 
+    if year in [2018]:
+        jet_btagdiscr = "btagDeepB"
+    elif year in [2022,2023]:
+        jet_btagdiscr = "btagPNetB"
+    elif year in [2024]:
+        jet_btagdiscr = "btagUParTAK4B"
+
+    jets_dnn[idx_top, 0, 0] = j0.area
+    jets_dnn[idx_top, 0, 1] = getattr(j0, jet_btagdiscr)
+    jets_dnn[idx_top, 0, 2] = deltaEta(j0.eta, sumjet.Eta())#j0.#delta eta 3jets-jet
+    jets_dnn[idx_top, 0, 3] = j0.mass
+    jets_dnn[idx_top, 0, 4] = deltaPhi(j0.phi, sumjet.Phi())#j0.#delta phi 3jets-jet
+    jets_dnn[idx_top, 0, 5] = j0.pt
+    jets_dnn[idx_top, 0, 6] = deltaPhi(j0.phi, fj_phi)#j0.#deltaphi fj-jet
+    jets_dnn[idx_top, 0, 7] = deltaEta(j0.eta, fj_eta)#j0.#deltaeta fj-jet
+
+    jets_dnn[idx_top, 1, 0] = j1.area
+    jets_dnn[idx_top, 1, 1] = getattr(j1, jet_btagdiscr)
+    jets_dnn[idx_top, 1, 2] = deltaEta(j1.eta, sumjet.Eta())
+    jets_dnn[idx_top, 1, 3] = j1.mass
+    jets_dnn[idx_top, 1, 4] = deltaPhi(j1.phi, sumjet.Phi())
+    jets_dnn[idx_top, 1, 5] = j1.pt
+    jets_dnn[idx_top, 1, 6] = deltaPhi(j1.phi, fj_phi)
+    jets_dnn[idx_top, 1, 7] = deltaEta(j1.eta, fj_eta)
+    if hasattr(j2,"pt"):
+        jets_dnn[idx_top, 2, 0] = j2.area
+        jets_dnn[idx_top, 2, 1] = getattr(j2, jet_btagdiscr)
+        jets_dnn[idx_top, 2, 2] = deltaEta(j2.eta, sumjet.Eta())#j2.#delta eta fj-jet
+        jets_dnn[idx_top, 2, 3] = j2.mass
+        jets_dnn[idx_top, 2, 4] = deltaPhi(j2.phi, sumjet.Phi())#j2.#delta phi fatjet-jet
+        jets_dnn[idx_top, 2, 5] = j2.pt
+        jets_dnn[idx_top, 2, 6] = deltaPhi(j2.phi, fj_phi)
+        jets_dnn[idx_top, 2, 7] = deltaEta(j2.eta, fj_eta)
     
-    if year==2018:
-        jets_dnn[idx_top, 0, 0] = j0.area
-        jets_dnn[idx_top, 0, 1] = j0.btagDeepB
-        jets_dnn[idx_top, 0, 2] = deltaEta(j0.eta, sumjet.Eta())#j0.#delta eta 3jets-jet
-        jets_dnn[idx_top, 0, 3] = j0.mass
-        jets_dnn[idx_top, 0, 4] = deltaPhi(j0.phi, sumjet.Phi())#j0.#delta phi 3jets-jet
-        jets_dnn[idx_top, 0, 5] = j0.pt
-        jets_dnn[idx_top, 0, 6] = deltaPhi(j0.phi, fj_phi)#j0.#deltaphi fj-jet
-        jets_dnn[idx_top, 0, 7] = deltaEta(j0.eta, fj_eta)#j0.#deltaeta fj-jet
-        
-        jets_dnn[idx_top, 1, 0] = j1.area
-        jets_dnn[idx_top, 1, 1] = j1.btagDeepB
-        jets_dnn[idx_top, 1, 2] = deltaEta(j1.eta, sumjet.Eta())
-        jets_dnn[idx_top, 1, 3] = j1.mass
-        jets_dnn[idx_top, 1, 4] = deltaPhi(j1.phi, sumjet.Phi())
-        jets_dnn[idx_top, 1, 5] = j1.pt
-        jets_dnn[idx_top, 1, 6] = deltaPhi(j1.phi, fj_phi)
-        jets_dnn[idx_top, 1, 7] = deltaEta(j1.eta, fj_eta)
-        if hasattr(j2,"pt"):
-            jets_dnn[idx_top, 2, 0] = j2.area
-            jets_dnn[idx_top, 2, 1] = j2.btagDeepB
-            jets_dnn[idx_top, 2, 2] = deltaEta(j2.eta, sumjet.Eta())#j2.#delta eta fj-jet
-            jets_dnn[idx_top, 2, 3] = j2.mass
-            jets_dnn[idx_top, 2, 4] = deltaPhi(j2.phi, sumjet.Phi())#j2.#delta phi fatjet-jet
-            jets_dnn[idx_top, 2, 5] = j2.pt
-            jets_dnn[idx_top, 2, 6] = deltaPhi(j2.phi, fj_phi)
-            jets_dnn[idx_top, 2, 7] = deltaEta(j2.eta, fj_eta)
-    elif year==2022:
-        jets_dnn[idx_top, 0, 0] = j0.area
-        jets_dnn[idx_top, 0, 1] = j0.btagDeepFlavB
-        jets_dnn[idx_top, 0, 2] = deltaEta(j0.eta, sumjet.Eta())#j0.#delta eta 3jets-jet
-        jets_dnn[idx_top, 0, 3] = j0.mass
-        jets_dnn[idx_top, 0, 4] = deltaPhi(j0.phi, sumjet.Phi())#j0.#delta phi 3jets-jet
-        jets_dnn[idx_top, 0, 5] = j0.pt
-        jets_dnn[idx_top, 0, 6] = deltaPhi(j0.phi, fj_phi)#j0.#deltaphi fj-jet
-        jets_dnn[idx_top, 0, 7] = deltaEta(j0.eta, fj_eta)#j0.#deltaeta fj-jet
-        
-        jets_dnn[idx_top, 1, 0] = j1.area
-        jets_dnn[idx_top, 1, 1] = j1.btagDeepFlavB
-        jets_dnn[idx_top, 1, 2] = deltaEta(j1.eta, sumjet.Eta())
-        jets_dnn[idx_top, 1, 3] = j1.mass
-        jets_dnn[idx_top, 1, 4] = deltaPhi(j1.phi, sumjet.Phi())
-        jets_dnn[idx_top, 1, 5] = j1.pt
-        jets_dnn[idx_top, 1, 6] = deltaPhi(j1.phi, fj_phi)
-        jets_dnn[idx_top, 1, 7] = deltaEta(j1.eta, fj_eta)
-        if hasattr(j2,"pt"):
-            jets_dnn[idx_top, 2, 0] = j2.area
-            jets_dnn[idx_top, 2, 1] = j2.btagDeepFlavB
-            jets_dnn[idx_top, 2, 2] = deltaEta(j2.eta, sumjet.Eta())#j2.#delta eta fj-jet
-            jets_dnn[idx_top, 2, 3] = j2.mass
-            jets_dnn[idx_top, 2, 4] = deltaPhi(j2.phi, sumjet.Phi())#j2.#delta phi fatjet-jet
-            jets_dnn[idx_top, 2, 5] = j2.pt
-            jets_dnn[idx_top, 2, 6] = deltaPhi(j2.phi, fj_phi)
-            jets_dnn[idx_top, 2, 7] = deltaEta(j2.eta, fj_eta)
-    elif year==2024:
-        jets_dnn[idx_top, 0, 0] = j0.area
-        jets_dnn[idx_top, 0, 1] = j0.btagUParTAK4B
-        jets_dnn[idx_top, 0, 2] = deltaEta(j0.eta, sumjet.Eta())#j0.#delta eta 3jets-jet
-        jets_dnn[idx_top, 0, 3] = j0.mass
-        jets_dnn[idx_top, 0, 4] = deltaPhi(j0.phi, sumjet.Phi())#j0.#delta phi 3jets-jet
-        jets_dnn[idx_top, 0, 5] = j0.pt
-        jets_dnn[idx_top, 0, 6] = deltaPhi(j0.phi, fj_phi)#j0.#deltaphi fj-jet
-        jets_dnn[idx_top, 0, 7] = deltaEta(j0.eta, fj_eta)#j0.#deltaeta fj-jet
-        
-        jets_dnn[idx_top, 1, 0] = j1.area
-        jets_dnn[idx_top, 1, 1] = j1.btagUParTAK4B
-        jets_dnn[idx_top, 1, 2] = deltaEta(j1.eta, sumjet.Eta())
-        jets_dnn[idx_top, 1, 3] = j1.mass
-        jets_dnn[idx_top, 1, 4] = deltaPhi(j1.phi, sumjet.Phi())
-        jets_dnn[idx_top, 1, 5] = j1.pt
-        jets_dnn[idx_top, 1, 6] = deltaPhi(j1.phi, fj_phi)
-        jets_dnn[idx_top, 1, 7] = deltaEta(j1.eta, fj_eta)
-        if hasattr(j2,"pt"):
-            jets_dnn[idx_top, 2, 0] = j2.area
-            jets_dnn[idx_top, 2, 1] = j2.btagUParTAK4B
-            jets_dnn[idx_top, 2, 2] = deltaEta(j2.eta, sumjet.Eta())#j2.#delta eta fj-jet
-            jets_dnn[idx_top, 2, 3] = j2.mass
-            jets_dnn[idx_top, 2, 4] = deltaPhi(j2.phi, sumjet.Phi())#j2.#delta phi fatjet-jet
-            jets_dnn[idx_top, 2, 5] = j2.pt
-            jets_dnn[idx_top, 2, 6] = deltaPhi(j2.phi, fj_phi)
-            jets_dnn[idx_top, 2, 7] = deltaEta(j2.eta, fj_eta)
     return jets_dnn
 
 def boost_PFC(pt_top,eta_top,phi_top,M_top,pt_PFC,eta_PFC,phi_PFC,M_PFC):
@@ -345,7 +297,7 @@ class nanoTopevaluate_MultiClass(Module):
             fj_dnn         = np.zeros((len(tophighpt),12))
         elif self.year==2022:
             jets_dnn            = np.zeros((len(tophighpt),3,8))
-            fj_dnn         = np.zeros((len(tophighpt),12))
+            fj_dnn         = np.zeros((len(tophighpt),9))
             if self.pfc:
                 PFC_dnn            = np.zeros((len(tophighpt),n_PFCs,13))
             
@@ -469,14 +421,14 @@ class nanoTopevaluate_MultiClass(Module):
             fj_dnn_res         = np.zeros((len(toplowpt),12))
         elif self.year==2022:
             jets_dnn_res            = np.zeros((len(toplowpt),3,8))
-            fj_dnn_res         = np.zeros((len(toplowpt),12))
+            fj_dnn_res         = np.zeros((len(toplowpt),9))
             if self.pfc:
                 PFC_dnn_res            = np.zeros((len(toplowpt),n_PFCs,13))
             if self.sv:
                 SVs_dnn_res           = np.zeros((len(toplowpt),n_SVs, 12))
         elif self.year==2024:
             jets_dnn_res            = np.zeros((len(toplowpt),3,8))
-            fj_dnn_res         = np.zeros((len(toplowpt),15))
+            fj_dnn_res         = np.zeros((len(toplowpt),9))
             if self.pfc:
                 PFC_dnn_res            = np.zeros((len(toplowpt),n_PFCs,9))
         mass_dnn_res = np.zeros((len(toplowpt),3))
