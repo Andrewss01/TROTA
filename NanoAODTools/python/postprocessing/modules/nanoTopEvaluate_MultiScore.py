@@ -402,7 +402,9 @@ class nanoTopevaluate_MultiClass(Module):
             prob_true_tt = (scores[:,1]).flatten().tolist()
             prob_false_tt = (scores[:,0]).flatten().tolist()
             prob_qcd = (scores[:,2]).flatten().tolist()
-          
+
+            # prob_QCDScore = prob_true_tt/(prob_true_tt + prob_qcd)
+            # prob_FT       = prob_true_tt/(prob_true_tt + prob_false_tt)
 
         else:
             prob_false_tt, prob_true_tt, prob_qcd = [], [], []
