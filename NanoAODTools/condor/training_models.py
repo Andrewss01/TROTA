@@ -17,11 +17,11 @@ TopResolved_2024_TROTA2D_ptcut = "model_TopResolved_2024_TROTA2D_ptcut.h5"
 
 models                      = {}
 
-models["TopMixed_2022_TROTA2D_ptcut"]    = path_to_model_folder+TopMixed_2022_TROTA2D_ptcut 
-models["TopResolved_2022_TROTA2D_ptcut"] = path_to_model_folder+TopResolved_2022_TROTA2D_ptcut 
+models["TopMixed_2022"]    = path_to_model_folder+TopMixed_2022_TROTA2D_ptcut 
+models["TopResolved_2022"] = path_to_model_folder+TopResolved_2022_TROTA2D_ptcut 
 
-models["TopMixed_2024_TROTA2D_ptcut"]          = path_to_model_folder+TopMixed_2024_TROTA2D_ptcut
-models["TopResolved_2024_TROTA2D_ptcut"]       = path_to_model_folder+TopResolved_2024_TROTA2D_ptcut
+models["TopMixed_2024"]          = path_to_model_folder+TopMixed_2024_TROTA2D_ptcut
+models["TopResolved_2024"]       = path_to_model_folder+TopResolved_2024_TROTA2D_ptcut
 
 
 

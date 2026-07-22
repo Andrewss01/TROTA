@@ -30,11 +30,11 @@ n_files = opt.nfiles
 
 
 
-modelMix_path_24 = models["TopMixed_2024_TROTA2D_ptcut"]
-modelRes_path_24 = models["TopResolved_2024_TROTA2D_ptcut"]
+# modelMix_path_24 = models["TopMixed_2024_TROTA2D_ptcut"]
+# modelRes_path_24 = models["TopResolved_2024_TROTA2D_ptcut"]
 
-modelMix_path_22 = models["TopMixed_2022_TROTA2D_ptcut"]
-modelRes_path_22 = models["TopResolved_2022_TROTA2D_ptcut"]
+# modelMix_path_22 = models["TopMixed_2022_TROTA2D_ptcut"]
+# modelRes_path_22 = models["TopResolved_2022_TROTA2D_ptcut"]
 
 
 
@@ -93,7 +93,7 @@ def sub_writer(folder, label, file_folder):
     f.write("log                     = "+folder+"condor/log/"   +label+".log\n")
     f.write("queue\n")
 
-def write_post_processor_script(folder, file, modules ): 
+def write_post_processor_script(folder, file, modules, year): 
     f = open(folder + 'post_processor.py', 'w')
     f.write('import ROOT\n')
     f.write('from PhysicsTools.NanoAODTools.postprocessing.framework.postprocessor import PostProcessor\n')
@@ -105,16 +105,21 @@ def write_post_processor_script(folder, file, modules ):
     # f.write('from PhysicsTools.NanoAODTools.postprocessing.modules.deltaR_PF_SV import *\n')
     f.write('from PhysicsTools.NanoAODTools.postprocessing.modules.NanoTopCandidate import *\n')
     f.write('import sys\n')
-    f.write('from PhysicsTools.NanoAODTools.postprocessing.modules.jetId import *\n')
-    f.write('from PhysicsTools.NanoAODTools.postprocessing.modules.fatjetId import *\n')
+    if year in [2024]:
+        f.write('from PhysicsTools.NanoAODTools.postprocessing.modules.jetId_v2 import *\n')
+    # f.write('from PhysicsTools.NanoAODTools.postprocessing.modules.fatjetId import *\n')
     if evaluate:  
         f.write('from PhysicsTools.NanoAODTools.postprocessing.modules.nanoTopEvaluate_MultiScore import *\n')
-    # f.write('from PhysicsTools.N') 
-    f.write('json = "/cvmfs/cms-griddata.cern.ch/cat/metadata/JME/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-07-17/jetid.json.gz"\n')
+     
+    # f.write('json = "/cvmfs/cms-griddata.cern.ch/cat/metadata/JME/Run3-24CDEReprocessingFGHIPrompt-Summer24-NanoAODv15/2025-07-17/jetid.json.gz"\n')
     if not debug:
-        f.write(f'p = PostProcessor(".", ["root://cms-xrd-global.cern.ch/{file}"], branchsel = None, modules = [{modules}], histFileName= "hist.root", histDirName= "plots", haddFileName="tree.root",  outputbranchsel="%s/src/PhysicsTools/NanoAODTools/scripts/keep_and_drop.txt" % os.environ["CMSSW_BASE"])\n')
-    else:
-        f.write(f'p = PostProcessor(".", ["root://cms-xrd-global.cern.ch/{file}"], branchsel = None, modules = [{modules}], histFileName= "hist.root", histDirName= "plots", haddFileName="tree.root",  outputbranchsel="%s/src/PhysicsTools/NanoAODTools/scripts/keep_and_drop.txt" % os.environ["CMSSW_BASE"], maxEntries = 100)\n')
+        extra_str = ""
+    else: 
+        extra_str = ", maxEntries = 100"
+
+    f.write(f'p = PostProcessor(".", ["root://cms-xrd-global.cern.ch/{file}"], branchsel = None, modules = [{modules}], histFileName= "hist.root", histDirName= "plots", haddFileName="tree.root",  outputbranchsel="%s/src/PhysicsTools/NanoAODTools/scripts/keep_and_drop.txt" % os.environ["CMSSW_BASE"]{extra_str})\n')
+    # <else:
+    #     f.write(f'p = PostProcessor(".", ["root://cms-xrd-global.cern.ch/{file}"], branchsel = None, modules = [{modules}], histFileName= "hist.root", histDirName= "plots", haddFileName="tree.root",  outputbranchsel="%s/src/PhysicsTools/NanoAODTools/scripts/keep_and_drop.txt" % os.environ["CMSSW_BASE"], maxEntries = 100)\n')
     # f.write('p = PostProcessor(".", +"'+file+'", branchsel = None, modules = modules_,  haddFileName= "histOut.root", histDirName= "plots", haddFileName ="'+label+'"+".root", )
     f.write('p.run()')
 
@@ -171,24 +176,68 @@ if submit:
 
         outfolder = "/tmp/"+username+"/"+data_label+"/"
 
-        if sample.year == 2024:
-            if evaluate:
-                modules_ = "MCweight_writer(), GenPart_MomFirstCp(flavour = '-5,-4,-3,-2,-1,1,2,3,4,5,6,-6,24,-24'),nanoprepro(), jetId(json, jetType='AK4PUPPI'), fatjetId(json, jetType='AK8PUPPI'),nanoTopcand_PFC_SV(year= "+str(sample.year)+"),nanoTopevaluate_MultiClass(year = " + str(sample.year)+ ", modelMix_path='"+modelMix_path_24+"', modelRes_path='"+modelRes_path_24+"')"
-            else:
-                modules_ = "MCweight_writer(), GenPart_MomFirstCp(flavour = '-5,-4,-3,-2,-1,1,2,3,4,5,6,-6,24,-24'),nanoprepro(), jetId(json, jetType='AK4PUPPI'), fatjetId(json, jetType='AK8PUPPI'),nanoTopcand_PFC_SV(year= "+str(sample.year)+")"
-        elif sample.year == 2022:
-            if evaluate:
-                modules_ = "MCweight_writer(), GenPart_MomFirstCp(flavour = '-5,-4,-3,-2,-1,1,2,3,4,5,6,-6,24,-24'),nanoprepro(), nanoTopcand_PFC_SV(year = "+str(sample.year)+ "),nanoTopevaluate_MultiClass(year = " + str(sample.year)+ ", modelMix_path='"+modelMix_path_22+"', modelRes_path='"+modelRes_path_22+"')"
-            else:
-                modules_ = "MCweight_writer(), GenPart_MomFirstCp(flavour = '-5,-4,-3,-2,-1,1,2,3,4,5,6,-6,24,-24'),nanoprepro(), nanoTopcand_PFC_SV(year = " +str(sample.year)+ ")"
+        # if sample.year == 2024:
+        #     if evaluate:
+        #         modules_ = "MCweight_writer(), GenPart_MomFirstCp(flavour = '-5,-4,-3,-2,-1,1,2,3,4,5,6,-6,24,-24'),nanoprepro(), jetId(json, jetType='AK4PUPPI'), fatjetId(json, jetType='AK8PUPPI'),nanoTopcand_PFC_SV(year= "+str(sample.year)+"),nanoTopevaluate_MultiClass(year = " + str(sample.year)+ ", modelMix_path='"+modelMix_path_24+"', modelRes_path='"+modelRes_path_24+"')"
+        #     else:
+        #         modules_ = "MCweight_writer(), GenPart_MomFirstCp(flavour = '-5,-4,-3,-2,-1,1,2,3,4,5,6,-6,24,-24'),nanoprepro(), jetId(json, jetType='AK4PUPPI'), fatjetId(json, jetType='AK8PUPPI'),nanoTopcand_PFC_SV(year= "+str(sample.year)+")"
+        # elif sample.year == 2022:
+        #     if evaluate:
+        #         modules_ = "MCweight_writer(), GenPart_MomFirstCp(flavour = '-5,-4,-3,-2,-1,1,2,3,4,5,6,-6,24,-24'),nanoprepro(), nanoTopcand_PFC_SV(year = "+str(sample.year)+ "),nanoTopevaluate_MultiClass(year = " + str(sample.year)+ ", modelMix_path='"+modelMix_path_22+"', modelRes_path='"+modelRes_path_22+"')"
+        #     else:
+        #         modules_ = "MCweight_writer(), GenPart_MomFirstCp(flavour = '-5,-4,-3,-2,-1,1,2,3,4,5,6,-6,24,-24'),nanoprepro(), nanoTopcand_PFC_SV(year = " +str(sample.year)+ ")"
 
 
         if not debug: 
-            os.popen("davix-mkdir {}/store/user/{}/{}/{}/ -E /tmp/x509up_u{} --capath /cvmfs/cms.cern.ch/grid/etc/grid-security/certificates/".format(redirector, username, tier_folder, data_label, str(uid)))
-            print(" FOLDER:         {}/store/user/{}/{}/{}/ CREATED".format(redirector, username, tier_folder, data_label))
-            os.popen("davix-mkdir {}/store/user/{}/{}/{}/{}/ -E /tmp/x509up_u{} --capath /cvmfs/cms.cern.ch/grid/etc/grid-security/certificates/".format(redirector, username, tier_folder, data_label, launchtime, str(uid)))
-            print(" FOLDER:         {}/store/user/{}/{}/{}/{}/ CREATED".format(redirector, username, tier_folder, data_label, launchtime))
+            command1 = os.popen("davix-mkdir {}/store/user/{}/{}/{}/ -E /tmp/x509up_u{} --capath /cvmfs/cms.cern.ch/grid/etc/grid-security/certificates/".format(redirector, username, tier_folder, data_label, str(uid)))
+            res1 = command1.read()
+            if "Error:" in res1: 
+                print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! CREATE THIS FOLDER MANUALLY !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!") 
+                print("Folder : {}/store/user/{}/{}/{}/   NOT CREATED".format(redirector, username, tier_folder, data_label))
+                print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!") 
+            else:
+                print(" FOLDER:         {}/store/user/{}/{}/{}/ CREATED".format(redirector, username, tier_folder, data_label))
+            command2  = os.popen("davix-mkdir {}/store/user/{}/{}/{}/{}/ -E /tmp/x509up_u{} --capath /cvmfs/cms.cern.ch/grid/etc/grid-security/certificates/".format(redirector, username, tier_folder, data_label, launchtime, str(uid)))
+            res2 = command2.read()
+            if "Error:" in res2:
+                print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! CREATE THIS FOLDER MANUALLY !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!") 
+                print(" FOLDER:         {}/store/user/{}/{}/{}/{}/ NOT CREATED".format(redirector, username, tier_folder, data_label, launchtime))
+                print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!") 
+            else:
+                print(" FOLDER:         {}/store/user/{}/{}/{}/{}/ CREATED".format(redirector, username, tier_folder, data_label, launchtime))
+        
+        modelMix_path = models["TopMixed_"+str(sample.year)]
+        modelRes_path = models["TopResolved_"+str(sample.year)]
+        
+        isMC = True
 
+        if isMC:
+            if sample.year in [2022,2024]:
+                modules_list = []
+
+                modules_list.append(f'MCweight_writer()')
+                if sample.year in [2024]:
+                    modules_list.append(f'jetId(year={sample.year},EE={sample.EE})')
+            
+                # modules_list.append(f'MET_Filter(year={sample.year})')
+                # modules_list.append(f'JetVetoMaps_run3(year={sample.year},EE={sample.EE})')
+                # modules_list.append(f'preselection()')
+                # modules_list.append(f'PUreweight(year={sample.year},EE={sample.EE})')
+                # if sample.year not in [2024]:
+                #     modules_list.append(f'BTagSF(year={sample.year},EE={sample.EE})')
+                # if calculate_systematics:
+                #     modules_list.append(f'CMSJMECalculators(configcreate(isMC={isMC},year={sample.year},EE={sample.EE},runPeriod=".",jetType="AK4PFPuppi",forMET=False,doJer=True),jetType="AK4PFPuppi",isMC={isMC},forMET=False,PuppiMET=False,addHEM2018Issue=False,NanoAODv={nanoaod_version})')
+                #     modules_list.append(f'CMSJMECalculators(configcreate(isMC={isMC},year={sample.year},EE={sample.EE},runPeriod=".",jetType="AK8PFPuppi",forMET=False,doJer=True),jetType="AK8PFPuppi",isMC={isMC},forMET=False,PuppiMET=False,addHEM2018Issue=False,NanoAODv={nanoaod_version})')
+                #     modules_list.append(f'CMSJMECalculators(configcreate(isMC={isMC},year={sample.year},EE={sample.EE},runPeriod=".",jetType="AK4PFPuppi",forMET=True,doJer=True),jetType="AK4PFPuppi",isMC={isMC},forMET=True,PuppiMET=True,addHEM2018Issue=False,NanoAODv={nanoaod_version})')
+                modules_list.append(f'GenPart_MomFirstCp(flavour="-5,-4,-3,-2,-1,1,2,3,4,5,6,-6,24,-24")')
+                modules_list.append(f'nanoprepro()')
+                modules_list.append(f'nanoTopcand_PFC_SV(isMC={isMC}, year={sample.year})')
+                # modules_list.append(f'globalvar()')
+                if evaluate:
+                    modules_list.append(f'nanoTopevaluate_MultiClass(year={sample.year},modelMix_path="{modelMix_path}",modelRes_path="{modelRes_path}")')
+
+        if sample.year in [2022,2023,2024]:
+            modules = ", ".join(modules_list)
         if hasattr(sample, 'dataset'):
             files_list = get_files_string(sample, option =  'global')
             
@@ -208,7 +257,7 @@ if submit:
                     os.makedirs(folder_file)
 
 
-                write_post_processor_script(folder_file, file , modules_)
+                write_post_processor_script(folder_file, file , modules, sample.year)
                 runner_writer(folder_file, idx, tier_folder, data_label,  launchtime, outfolder_i,)
                 sub_writer(condor_folder, label, folder_file)
                 # print('folder is: ', folder_file, ' path_dataset: ', tier_folder, ' label: ', label)   

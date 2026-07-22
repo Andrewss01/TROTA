@@ -524,22 +524,11 @@ def top3j1fj(fj, j0, j1, j2, dr0=None, dr1=None, dr2=None, s=None):
 
 
 def get_jet(jets):
-    goodjet = list(filter(lambda x : x.jetId and x.pt>25 and abs(x.eta)<2.7 , jets))
-    # idx_good = 0
-    # for idx_jet in range(len(jets)):
-    #     if jets[idx_jet] in goodjet:
-    #         idx_good = goodjet.index(jets[idx_jet])
-    #         goodjet[idx_good].jetIdx = idx_jet
-    #         # idx_good += 1
+    goodjet = list(filter(lambda x : x.jetId and x.pt>25 and abs(x.eta)<2.5 , jets))
     return goodjet
+
 def get_fatjet(fatjets):
-    goodfatjets = list(filter(lambda x : x.jetId and abs(x.eta) < 2.7 and (x.globalParT3_QCD + x.globalParT3_Xbb)>0, fatjets))
-    # idx_good = 0
-    # for idx_fj in range(len(fatjets)):
-    #     if fatjets[idx_fj] in goodfatjets:
-    #         idx_good = goodfatjets.index(fatjets[idx_fj])
-    #         goodfatjets[idx_good].fatjetIdx = idx_fj
-    #         # idx_good += 1
+    goodfatjets = list(filter(lambda x : x.jetId and abs(x.eta) < 2.5 and x.pt>200, fatjets))
     return goodfatjets
 
 def presel(jets, fatjets): #returns 2 collections of jets and fatjets
