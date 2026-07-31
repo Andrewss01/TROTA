@@ -16,8 +16,9 @@ parser.add_option('--dryrun', dest='debug', action='store_true', default=False, 
 parser.add_option('-s', '--submit', dest='submit', action='store_true', default=False, help='True if you want to submit jobs')
 parser.add_option('-e', '--evaluate', action = 'store_true', default = False, help='True if you want to evaluate with the training models')
 parser.add_option('--status', action='store_true', default=False, help='True if you want to check status of jobs')
-parser.add_option('--folder', dest='folder', default='TROTA2024/Training_samples', help = 'choose the folder name on you tier where the files will be saved')
-parser.add_option('--nfiles', dest='nfiles', type=int, default=5, help = 'choose the folder name on you tier where the files will be saved')
+parser.add_option('--folder', dest='folder', default='TROTA', help = 'choose the folder name on you tier where the files will be saved')
+parser.add_option('--nfiles', dest='nfiles', type=int, default=1, help = 'max number of files to run. If -1 means all')
+parser.add_option('-r', '--resubmit', dest='resubmit', action='store_true', default=False, help='resubmit failed jobs')
 
 (opt, args) = parser.parse_args()
 debug = opt.debug 
@@ -27,6 +28,7 @@ evaluate = opt.evaluate
 status = opt.status
 tier_folder = opt.folder
 n_files = opt.nfiles
+resubmit = opt.resubmit
 
 
 
@@ -74,7 +76,7 @@ if not os.path.exists(running_folder):
     os.makedirs(running_folder)
 
 
-def sub_writer(folder, label, file_folder):
+def sub_writer(folder, label, file_folder, sample):
     f = open(file_folder + "condor.sub","w")
     f.write('Proxy_filename          = x509up\n')
     f.write('Proxy_path              = /afs/cern.ch/user/' + inituser + "/" + username + "/private/$(Proxy_filename)\n")
@@ -84,7 +86,8 @@ def sub_writer(folder, label, file_folder):
     # f.write('should_transfer_files   = YES\n')
     # f.write("when_to_transfer_output = ON_EXIT\n")
     f.write("transfer_input_files    = $(Proxy_path)\n")
-    f.write("+JobFlavour             = \"nextweek\"\n") # options are espresso = 20 minutes, microcentury = 1 hour, longlunch = 2 hours, workday = 8 hours, tomorrow = 1 day, testmatch = 3 days, nextweek     = 1 week
+    f.write("+JobFlavour             = \"nextweek\"\n")
+    f.write('+JobTag                 = "'+sample+'_'+label+'"\n') # options are espresso = 20 minutes, microcentury = 1 hour, longlunch = 2 hours, workday = 8 hours, tomorrow = 1 day, testmatch = 3 days, nextweek     = 1 week
     # f.write("initialdir              = " + folder + "\n")
     f.write("executable              = " + folder + label +"/runner.sh\n")
     f.write("arguments               = $(Proxy_path)\n")
@@ -243,11 +246,12 @@ if submit:
             
             if debug: files_list = files_list[:1]
             print('numer total files: ', len(files_list))
-            if len(files_list)>=n_files:
-                files_list = files_list[:n_files]
+            if n_files != -1:
+                if len(files_list)>=n_files:
+                    files_list = files_list[:n_files]
             for idx, file in enumerate(files_list):
                 print("...submitting file ", idx, end = '\r')
-                label = 'file_'+str(idx)
+                label = 'file'+str(idx)
                 
 
 
@@ -259,7 +263,7 @@ if submit:
 
                 write_post_processor_script(folder_file, file , modules, sample.year)
                 runner_writer(folder_file, idx, tier_folder, data_label,  launchtime, outfolder_i,)
-                sub_writer(condor_folder, label, folder_file)
+                sub_writer(condor_folder, label, folder_file, sample.label)
                 # print('folder is: ', folder_file, ' path_dataset: ', tier_folder, ' label: ', label)   
                 # print('outfolder is: ', outfolder_i, ' condor folder is: ', condor_folder)
                 if submit and not debug:
@@ -269,46 +273,36 @@ if submit:
                     # time.sleep(5)
                 
    
-if status:
-    print('###### Status mode ######')
-    print("Do NOT resubmit jobs before they're finished")
+if status: 
+    print("\n################################################ STATUS mode")
     
     for sample in samples:
-        davixfolder = find_folder(redirector, username, tier_folder, sample.label, "/tmp/x509up_u"+str(uid), "/cvmfs/cms.cern.ch/grid/etc/grid-security/certificates/")
-        file_sizes = get_file_sizes(davixfolder, "/tmp/x509up_u"+str(uid), "/cvmfs/cms.cern.ch/grid/etc/grid-security/certificates/")
-        print("Checking status for empty files in ", sample.label)
-        print("Tier folder: ", davixfolder)
-        job_failed = 0
-        job_success = 0
-        job_running= 0
-        print(running_folder+"/"+sample.label)
+        print(f"Sample: {sample.label}")
         listoffile = os.listdir(running_folder+"/"+sample.label)
         jobs_total = 0 
         for f in listoffile: 
             if f.startswith("file"):
-                n = int(f.split("file_")[-1])
+                n = int(f.split("file")[-1])
                 if n>jobs_total: jobs_total = n
         jobs_total += 1
-        for file_name, file_size in file_sizes.items():
-            file_num = file_name.split('.')[0].split('_')[-1]
-            if file_size <1000:
-                # print(f"File: {file_name}, Size: {file_size} bytes")
-                job_failed += 1
-            elif not os.path.exists(running_folder+"/"+sample.label+"/condor/error/file_"+str(file_num)+".err"):
-                job_running +=1
-                # print('job running: ', job_running ,' ', running_folder+"/"+sample.label+"/condor/error/"+sample.label+"_file"+str(file_num)+".err maybe on hold")
-            else:
-                job_success += 1
+        print(f"Total number of jobs:               {jobs_total}")
+        check_status_submission(sample.label,username, uid, tier_folder, redirector,jobs_total, resubmit = False)
+        files = get_files_string(sample)
+        # print(len(files))
+        if len(files)!=jobs_total:
+            print("\n############## ATTENTION NOT ALL JOB SUBMITTED!")
 
-
-        print("--------------------------------------------------------------------------------\n")
-        print("dataset: ", sample.label)
-        print("Total jobs: ", jobs_total)
-        print("\033[91mJobs failed: {} ({:.2f}%)\033[0m".format(job_failed, (job_failed/jobs_total)*100))
-        print("\033[92mJobs succeeded: {} ({:.2f}%)\033[0m\n".format(job_success, (job_success/jobs_total)*100))
-        print("running jobs: {} ({:.2f}%)\n".format(jobs_total-(job_failed+job_success), ((jobs_total-(job_failed+job_success))/jobs_total)*100))
-        check_errors_fromcondor(sample.label, username, uid, tier_folder, redirector, resubmit=True, delete_files_fromtier=False)
-        print('jobs running or on hold: ', job_running)
-        print("\n--------------------------------------------------------------------------------")
-
-
+if resubmit:
+    print("\n################################################ RESUBMIT mode")
+    
+    for sample in samples:
+        print(f"Sample: {sample.label}")
+        listoffile = os.listdir(running_folder+"/"+sample.label)
+        jobs_total = 0 
+        for f in listoffile: 
+            if f.startswith("file"):
+                n = int(f.split("file")[-1])
+                if n>jobs_total: jobs_total = n
+        jobs_total += 1
+        print(f"Total number of jobs:               {jobs_total}")
+        check_status_submission(sample.label,username, uid, tier_folder, redirector,jobs_total, resubmit = True)
