@@ -10,7 +10,7 @@ import argparse
 #year   = args.year
 
 
-path_to_training_folder = '/eos/user/a/apuglia/TROTA/TROTA2024/pkls/dataset_reduced'
+path_to_training_folder = '/eos/user/a/apuglia/TROTA/TROTA2022/pkls/reduced_pkls/'
 
 # path_to_pkl_folder          = "{}/training_dataset_pt_cut_600".format(path_to_training_folder)
 dataset                     = {}
@@ -28,6 +28,6 @@ for fileName in os.listdir(path_to_training_folder):
 
 
 concName             = "training_dataset_1_pt_cut_600.pkl"
-path_to_conc         = f"/eos/user/a/apuglia/TROTA/TROTA2024/pkls/{concName}"
+path_to_conc         = f"/eos/user/a/apuglia/TROTA/TROTA2022/pkls/{concName}"
 with open(path_to_conc, "wb") as f:
     pkl.dump(obj=dataset, file=f)

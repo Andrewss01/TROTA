@@ -12,7 +12,7 @@ from checkjobs import get_file_sizes, find_folder, job_exit_code, checkSubmitSta
 usage = 'python3 getoutputs.py -d dataset_name'
 parser = optparse.OptionParser(usage)
 parser.add_option('-d', '--dat', dest='dat', type=str, default = '', help='Please enter a dataset name')
-parser.add_option('-o', '--output', dest='output', type=str, default = '../python/postprocessing/samples/dict_samples_trainings_2024.json', help='Please enter a json output file')
+parser.add_option('-o', '--output', dest='output', type=str, default = '../python/postprocessing/samples/dict_samples_trainings_2022.json', help='Please enter a json output file')
 parser.add_option('--tier', dest='tier', type=str, default = 'bari', help='Please enter location where to write the output file (tier pisa or bari)')
 
 (opt, args) = parser.parse_args()
@@ -31,17 +31,18 @@ username = str(os.environ.get('USER'))
 inituser = str(os.environ.get('USER')[0])
 uid      = int(os.getuid())
 workdir  = "user" if "user" in os.environ.get('PWD') else "work"
+proxy    = os.environ.get("X509_USER_PROXY","/tmp/x509up_u" + str(uid))
 
 if(uid == 0):
     print("Please insert your uid")
     exit()
-if not os.path.exists("/tmp/x509up_u" + str(uid)):
-    os.system('voms-proxy-init --rfc --voms cms -valid 192:00')
-os.popen("cp /tmp/x509up_u" + str(uid) + " /afs/cern.ch/user/" + inituser + "/" + username + "/private/x509up")
+# if not os.path.exists("/tmp/x509up_u" + str(uid)):
+#     os.system('voms-proxy-init --rfc --voms cms -valid 192:00')
+os.popen("cp "+ proxy + " /afs/cern.ch/user/" + inituser + "/" + username + "/private/x509up")
 
 # insert here the name of output folder
 running_folder                      = os.environ.get('PWD') + "/tmp/post_processing/"
-remote_folder_name                  = "TROTA2024/Training_samples"
+remote_folder_name                  = "TROTA2022/Training_samples"
 
 def get_files_on_tier(folder, cert_path, ca_path):
     try:
@@ -51,12 +52,10 @@ def get_files_on_tier(folder, cert_path, ca_path):
         
         output, error = process.communicate()
         output = output.decode('utf-8')
-        # print(output)
         files = []
         for line in output.splitlines():
             # Ignora le righe non relative ai file (come intestazioni o directory)
             if line.endswith('.root') and line:
-                # print(line)
                 file_name = line
                 files.append(file_name)
         
@@ -66,8 +65,9 @@ def get_files_on_tier(folder, cert_path, ca_path):
         print(f"Errore nell'esecuzione di davix-ls: {e}")
         return {}
 
-        
+
 dataset = opt.dat 
+
 if dataset == '':
     print("Please enter a dataset name")
     exit()
@@ -119,15 +119,15 @@ for sample in samples:
         out_dict[sample.label] = {}
         out_dict[sample.label][sample.label] = {}
     print("---------- Running sample: ", sample.label)
-    folder = find_folder(redirector, username, remote_folder_name, sample.label, "/tmp/x509up_u"+str(uid), "/cvmfs/cms.cern.ch/grid/etc/grid-security/certificates/")
+    folder = find_folder(redirector, username, remote_folder_name, sample.label,proxy, "/cvmfs/cms.cern.ch/grid/etc/grid-security/certificates/")
     print("Folder: ", folder)
     
-    files_strings   = get_files_on_tier(folder, "/tmp/x509up_u"+str(uid), "/cvmfs/cms.cern.ch/grid/etc/grid-security/certificates/")
+    files_strings   = get_files_on_tier(folder, proxy, "/cvmfs/cms.cern.ch/grid/etc/grid-security/certificates/")
     
-    file_sizes      = get_file_sizes(folder, "/tmp/x509up_u"+str(uid), "/cvmfs/cms.cern.ch/grid/etc/grid-security/certificates/")
+    file_sizes      = get_file_sizes(folder, proxy, "/cvmfs/cms.cern.ch/grid/etc/grid-security/certificates/")
     files_strings   = []
 
-    jobs_total, total_on_tier, to_resubmit, not_found, empty, jobs_toResubmit_notFoundOnTier, jobs_toResubmit_emptyFile = checkSubmitStatus(redirector, username, uid, sample, running_folder, remote_folder_name)
+    jobs_total, total_on_tier, to_resubmit, not_found, empty, jobs_toResubmit_notFoundOnTier, jobs_toResubmit_emptyFile = checkSubmitStatus(redirector, username, uid, sample, running_folder, remote_folder_name, proxy)
     for file_name, file_size in file_sizes.items():
         jobNumber        = int(file_name.split("_")[-1].split(".")[0])
         if jobNumber in jobs_toResubmit_emptyFile:
@@ -141,7 +141,7 @@ for sample in samples:
             files_strings.append(file_name)
     
    
-    path_file = folder
+    path_file = folder.replace(redirector, "root://xrootd-cms.infn.it/")
     ntot = []
     out_strings = []
     for f in tqdm(files_strings): 

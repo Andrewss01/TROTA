@@ -64,7 +64,7 @@ def job_exit_code(job_logFile):
 
     return exit_code
 
-def checkSubmitStatus(redirector, username, uid, sample, running_folder, remote_folder_name):
+def checkSubmitStatus(redirector, username, uid, sample, running_folder, remote_folder_name, proxy):
     import os
     # print("Sample: ", sample.label)
     listoffile = os.listdir(running_folder+"/"+sample.label)
@@ -79,9 +79,9 @@ def checkSubmitStatus(redirector, username, uid, sample, running_folder, remote_
 
 
     # check number of files that have been actually created
-    davixfolder                     = find_folder(redirector, username, remote_folder_name, sample.label, "/tmp/x509up_u"+str(uid), "/cvmfs/cms.cern.ch/grid/etc/grid-security/certificates/")
+    davixfolder                     = find_folder(redirector, username, remote_folder_name, sample.label, proxy, "/cvmfs/cms.cern.ch/grid/etc/grid-security/certificates/")
     # print("davixfolder: ", davixfolder)
-    file_sizes                      = get_file_sizes(davixfolder, "/tmp/x509up_u"+str(uid), "/cvmfs/cms.cern.ch/grid/etc/grid-security/certificates/")
+    file_sizes                      = get_file_sizes(davixfolder, proxy, "/cvmfs/cms.cern.ch/grid/etc/grid-security/certificates/")
     total_files_onTier              = len(file_sizes)
     fileNumbers_onTier              = [int(file_name.split("_")[-1].split(".")[0]) for file_name, file_size in file_sizes.items()]
     njobs_toResubmit     = 0
@@ -153,47 +153,6 @@ def summarize_job_status(username, uid, samples, running_folder, remote_folder_n
     df = pd.DataFrame(summary)
     return df
 
-def check_errors_fromcondor(dataset, username, uid, remote_folder_name, redirector, resubmit=False, delete_files_fromtier=False):
-    err_folder = os.environ.get('PWD')+ f"/tmp/{dataset}/condor/error/"
-    log_folder = os.environ.get('PWD')+ f"/tmp/{dataset}/condor/log/"
-    output_folder = os.environ.get('PWD')+ f"/tmp/{dataset}/condor/output/"
-    tmp_folder = os.environ.get('PWD')+ f"/tmp/{dataset}/"
-    listoffile = os.listdir(err_folder)
-    list_of_job_errors = subprocess.run(f"grep -l '(Davix::HttpRequest) Error' {err_folder}/*.err", shell=True, capture_output=True, text=True)
-    jobs_with_errors = list_of_job_errors.stdout.split('\n')
-    jobs_with_errors_numbers = [e.split("_")[-1].replace(".err","") for e in jobs_with_errors[:-1]]
-    str_resubmit = ""
-    for e in jobs_with_errors_numbers:
-        str_resubmit += f"condor_submit tmp/{dataset}/{e}/condor.sub; "
-    if not resubmit:
-        print(f"Found {len(jobs_with_errors_numbers)} jobs with Davix errors in dataset {dataset}. To resubmit them, run:\n{str_resubmit}")
-    else:
-        print(f"Resubmitting {len(jobs_with_errors_numbers)} jobs with Davix errors in dataset {dataset}...")
-        for n in jobs_with_errors_numbers:
-            subprocess.run(f"rm {err_folder}/{dataset}_{n}.err", shell=True, capture_output=True, text=True)
-            subprocess.run(f"rm {output_folder}/{dataset}_{n}.out", shell=True, capture_output=True, text=True)
-            subprocess.run(f"rm {log_folder}/{dataset}_{n}.log", shell=True, capture_output=True, text=True)
-        print("REMOVED condor log, err and out files ")
-        subprocess.run(str_resubmit, shell=True, capture_output=True, text=True)
-    if delete_files_fromtier:
-        print(f"Deleting files from tier for {len(jobs_with_errors_numbers)} jobs with Davix errors in dataset {dataset}...")
-        jobs_to_delete = [n.replace("file", "") for n in jobs_with_errors_numbers]
-        print("Files to be deleted:\n "+str(jobs_to_delete))
-        for n in jobs_to_delete:
-            davixfolder = find_folder(redirector, username, remote_folder_name, dataset, "/tmp/x509up_u"+str(uid), "/cvmfs/cms.cern.ch/grid/etc/grid-security/certificates/")
-            file_name = f"tree_hadd_{n}.root"
-            print(f"davix-rm {davixfolder}/{file_name} -E /tmp/x509up_u{uid} --capath /cvmfs/cms.cern.ch/grid/etc/grid-security/certificates/")
-            result = subprocess.run(f"davix-rm {davixfolder}/{file_name} -E /tmp/x509up_u{uid} --capath /cvmfs/cms.cern.ch/grid/etc/grid-security/certificates/", shell=True, capture_output=True, text=True)
-            print(result.stdout)
-            if result.stderr:
-                print(f"Error: {result.stderr}")
-            else:
-                subprocess.run(f"rm {err_folder}/{dataset}_{n}.err", shell=True, capture_output=True, text=True)
-                subprocess.run(f"rm {output_folder}/{dataset}_{n}.out", shell=True, capture_output=True, text=True)
-                subprocess.run(f"rm {log_folder}/{dataset}_{n}.log", shell=True, capture_output=True, text=True)
-                subprocess.run(f"rm -r {tmp_folder}/file{n}", shell=True, capture_output=True, text=True)
-                
-        print("Deleted files from tier.")
 
 def check_status_submission(dataset,username, uid, remote_folder_name, redirector,jobs_total, resubmit=False): 
     davixfolder = find_folder(redirector, username, remote_folder_name, dataset, "/tmp/x509up_u"+str(uid), "/cvmfs/cms.cern.ch/grid/etc/grid-security/certificates/")
@@ -202,27 +161,27 @@ def check_status_submission(dataset,username, uid, remote_folder_name, redirecto
     job_success = 0
     successJobTag_list = []
     
-    err_folder = os.environ.get('PWD')+ f"/tmp/post_processing/{dataset}/condor/error"
-    log_folder = os.environ.get('PWD')+ f"/tmp/post_processing/{dataset}/condor/log"
-    out_folder = os.environ.get('PWD')+ f"/tmp/post_processing/{dataset}/condor/output"
+    err_folder = os.environ.get('PWD')+ f"/tmp/{dataset}/condor/error"
+    log_folder = os.environ.get('PWD')+ f"/tmp/{dataset}/condor/log"
+    out_folder = os.environ.get('PWD')+ f"/tmp/{dataset}/condor/output"
     
     for file_name, file_size in file_sizes.items():
-            if file_size >= 1000:
-                # job_success += 1
-                # print(file_name)
-                idx_file = file_name.split("_")[-1].replace('.root','')
-                job_success += 1
-                # print(idx_file)
-                successJobTag_list.append(dataset+"_file"+str(idx_file))
+       
+        if file_size >= 1000:
+            # job_success += 1
+            # print(file_name)
+            idx_file = file_name.split("_")[-1].replace('.root','')
+            job_success += 1
+            # print(idx_file)
+            successJobTag_list.append(dataset+"_file"+str(idx_file))
 
-                # print(file_name)
     result = subprocess.run("condor_q -af:h ClusterId JobStatus JobTag", shell=True, capture_output=True, text=True)
     runningJobId_list, runningJobStatus_list, runningJobTag_list = [], [], []
     failedJobTag_list = []
 
     for line in result.stdout.splitlines()[1:]:
         jobId, runStatus, JobTag = line.split()
-        if dataset in JobTag and JobTag not in successJobTag_list:
+        if dataset+"_" in JobTag and JobTag not in successJobTag_list:
             # if JobTag in successJobTag_list:
             #     print("ATTENTION double counting: ", JobTag)
             runningJobId_list.append(jobId)
@@ -264,7 +223,7 @@ def check_status_submission(dataset,username, uid, remote_folder_name, redirecto
             file_label = jobTag.split('_')[-1]
            
             print("...REMOVING condor log, err and out ", file_label, end="\r")
-            resubmit_string += f"condor_submit tmp/post_processing/{dataset}/{file_label}/condor.sub; "
+            resubmit_string += f"condor_submit tmp/{dataset}/{file_label}/condor.sub; "
             subprocess.run(f"rm {err_folder}/{dataset}_{file_label}.err",shell=True, capture_output=True, text=True)
             subprocess.run(f"rm {log_folder}/{dataset}_{file_label}.log",shell=True, capture_output=True, text=True)
             subprocess.run(f"rm {out_folder}/{dataset}_{file_label}.out",shell=True, capture_output=True, text=True)
@@ -283,50 +242,3 @@ def check_status_submission(dataset,username, uid, remote_folder_name, redirecto
         print(f"Failed {job_failed} jobs have been resubmitted ")
 
         
-
-    # if resubmit: 
-    #     print(f"Resubmitting {len(failedJobTag_list)} jobs in dataset {dataset}...")
-    #     for name in failedJobTag_list:
-    #         # idx = str()
-    #         subprocess.run(f"rm {err_folder}/{dataset}_{n}.err", shell=True, capture_output=True, text=True)
-    #         subprocess.run(f"rm {output_folder}/{dataset}_{n}.out", shell=True, capture_output=True, text=True)
-    #         subprocess.run(f"rm {log_folder}/{dataset}_{n}.log", shell=True, capture_output=True, text=True)
-    #     print("REMOVED condor log, err and out files ")
-    #     subprocess.run(str_resubmit, shell=True, capture_output=True, text=True)
-    # if delete_files_fromtier:
-    #     print(f"Deleting files from tier for {len(jobs_with_errors_numbers)} jobs with Davix errors in dataset {dataset}...")
-    #     jobs_to_delete = [n.replace("file", "") for n in jobs_with_errors_numbers]
-    #     print("Files to be deleted:\n "+str(jobs_to_delete))
-    #     for n in jobs_to_delete:
-    #         davixfolder = find_folder(redirector, username, remote_folder_name, dataset, "/tmp/x509up_u"+str(uid), "/cvmfs/cms.cern.ch/grid/etc/grid-security/certificates/")
-    #         file_name = f"tree_hadd_{n}.root"
-    #         print(f"davix-rm {davixfolder}/{file_name} -E /tmp/x509up_u{uid} --capath /cvmfs/cms.cern.ch/grid/etc/grid-security/certificates/")
-    #         result = subprocess.run(f"davix-rm {davixfolder}/{file_name} -E /tmp/x509up_u{uid} --capath /cvmfs/cms.cern.ch/grid/etc/grid-security/certificates/", shell=True, capture_output=True, text=True)
-    #         print(result.stdout)
-    #         if result.stderr:
-    #             print(f"Error: {result.stderr}")
-    #         else:
-    #             subprocess.run(f"rm {err_folder}/{dataset}_{n}.err", shell=True, capture_output=True, text=True)
-    #             subprocess.run(f"rm {output_folder}/{dataset}_{n}.out", shell=True, capture_output=True, text=True)
-    #             subprocess.run(f"rm {log_folder}/{dataset}_{n}.log", shell=True, capture_output=True, text=True)
-    #             subprocess.run(f"rm -r {tmp_folder}/file{n}", shell=True, capture_output=True, text=True)
-                
-    #     print("Deleted files from tier.")
-
-
-# idleJobTag_list
-# notRunningJobTag_list = "non sono sul tier & non è in running (la sua JobTag non è tra quelle che stanno girando su condor_q)"  
-# successfulJobTag_list = "sono sul tier ed hanno una certa dimensione"
-# failedJobTag_list     = "sta qui dentro totalJobTag_list ma non stanno in successfulJobTag_list nè in runningJobTag_list, nè in idle"
-
-# len(successfulJobTag_list)/len(totalJobTag_list)
-
-# # Esempio di utilizzo
-# folder = find_folder("Run3Analysis_Tprime", "TprimeToTZ_1800_2022", "/tmp/x509up_u140541", "/cvmfs/cms.cern.ch/grid/etc/grid-security/certificates/")
-# # directory_url = "davs://stwebdav.pi.infn.it:8443/cms/store/user/acagnott/Run3Analysis_Tprime/DataEGammaC_2022/20240703_092359/"
-# # cert_path = "/tmp/x509up_u140541"
-# # ca_path = "/cvmfs/cms.cern.ch/grid/etc/grid-security/certificates/"
-# file_sizes = get_file_sizes(folder, "/tmp/x509up_u140541", "/cvmfs/cms.cern.ch/grid/etc/grid-security/certificates/")
-# for file_name, file_size in file_sizes.items():
-#     if file_size <1000:
-#         print(f"File: {file_name}, Size: {file_size} bytes")

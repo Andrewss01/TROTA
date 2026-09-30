@@ -1,11 +1,11 @@
 import os
+import optparse
 import sys
 import time
-import ROOT
-import optparse
-from PhysicsTools.NanoAODTools.postprocessing.utils.get_file_fromdas import *
+import json
 from PhysicsTools.NanoAODTools.postprocessing.samples.samples import *
-from checkjobs import *
+from PhysicsTools.NanoAODTools.postprocessing.utils.get_file_fromdas import *
+from checkjobs import get_file_sizes, find_folder, check_status_submission
 from training_models import models
 
 usage = 'python3 postproc_submitter.py -d dataset_name'
@@ -14,12 +14,12 @@ parser.add_option('-d', '--dat', dest='dat', type=str, default = '', help='Pleas
 parser.add_option('--tier', dest='tier', type=str, default = 'bari', help='Please enter location where to write the output file (tier pisa or bari)')
 parser.add_option('--dryrun', dest='debug', action='store_true', default=False, help='True if you want to write trial file but not submitting it (rembeber to set also submit to True)')
 parser.add_option('-s', '--submit', dest='submit', action='store_true', default=False, help='True if you want to submit jobs')
-parser.add_option('-e', '--evaluate', action = 'store_true', default = False, help='True if you want to evaluate with the training models')
+parser.add_option('-r', '--resubmit', dest='resubmit', action='store_true', default=False, help='resubmit failed jobs')
 parser.add_option('--status', action='store_true', default=False, help='True if you want to check status of jobs')
 parser.add_option('--folder', dest='folder', default='TROTA', help = 'choose the folder name on you tier where the files will be saved')
 parser.add_option('--nfiles', dest='nfiles', type=int, default=1, help = 'max number of files to run. If -1 means all')
-parser.add_option('-r', '--resubmit', dest='resubmit', action='store_true', default=False, help='resubmit failed jobs')
-
+parser.add_option('-e', '--evaluate', action = 'store_true', default = False, help='True if you want to evaluate with the training models')
+parser.add_option('--dict_samples',default=None, help='dict_samples for files to select')
 (opt, args) = parser.parse_args()
 debug = opt.debug 
 submit = opt.submit
@@ -30,25 +30,24 @@ tier_folder = opt.folder
 n_files = opt.nfiles
 resubmit = opt.resubmit
 
+dict_samples_name = opt.dict_samples
+if dict_samples_name != None:
+    dict_samples = "../python/postprocessing/samples/"+ dict_samples_name
+else:
+    dict_samples = None
 
+if dict_samples != None:
+    with open(dict_samples,"rb") as sample_file:
+        dict_samples_json = json.load(sample_file)
 
-# modelMix_path_24 = models["TopMixed_2024_TROTA2D_ptcut"]
-# modelRes_path_24 = models["TopResolved_2024_TROTA2D_ptcut"]
-
-# modelMix_path_22 = models["TopMixed_2022_TROTA2D_ptcut"]
-# modelRes_path_22 = models["TopResolved_2022_TROTA2D_ptcut"]
-
-
-
+if tier == 'bari':
+    redirector = "davs://webdav.recas.ba.infn.it:8443/cms"
+elif tier=="pisa":
+    redirector = "davs://stwebdav.pi.infn.it:8443/cms"
 
 username = str(os.environ.get('USER'))
 inituser = str(os.environ.get('USER')[0])
 uid      = int(os.getuid())
-
-if tier == 'bari':
-    redirector = "davs://webdav.recas.ba.infn.it:8443/cms"
-else: 
-    redirector = "davs://webdav.recas.ba.infn.it:8443/cms"
 
 dataset_to_run = opt.dat
 
@@ -242,8 +241,12 @@ if submit:
         if sample.year in [2022,2023,2024]:
             modules = ", ".join(modules_list)
         if hasattr(sample, 'dataset'):
-            files_list = get_files_string(sample, option =  'global')
-            
+            if dict_samples != None:
+                files_list = dict_samples_json[data_label][data_label]["strings"]
+            else:
+                files_list = get_files_string(sample, option =  'global')
+
+            # print("files list: ", files_list)
             if debug: files_list = files_list[:1]
             print('numer total files: ', len(files_list))
             if n_files != -1:
@@ -253,6 +256,7 @@ if submit:
                 print("...submitting file ", idx, end = '\r')
                 label = 'file'+str(idx)
                 
+                file  = file.replace(redirector,"")
 
 
                 folder_file = condor_folder+ label + "/" 

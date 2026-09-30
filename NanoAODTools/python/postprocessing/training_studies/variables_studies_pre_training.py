@@ -280,9 +280,9 @@ def write_root(proc_data, out_path, n_bins=100):
 
 usage = 'python3 variables_studies_pre_training.py [options]'
 parser = optparse.OptionParser(usage)
-parser.add_option('-y', '--year',     dest='year',     default='2022',
+parser.add_option('-y', '--year',     dest='year',     default='2024',
                   help='Anno di presa dati: 2018, 2022, 2024 (default: 2024)')
-parser.add_option('-o', '--outdir',   dest='outdir',   default='/eos/user/a/apuglia/TROTA/TROTA2024/studies_training/',
+parser.add_option('-o', '--outdir',   dest='outdir',   default='/eos/user/a/apuglia/TROTA/TROTA2022/studies_training/',
                   help='Directory di output per il file ROOT')
 parser.add_option('-n', '--nbins',    dest='nbins',    default=100, type='int',
                   help='Numero di bin degli istogrammi (default: 100)')
@@ -294,7 +294,7 @@ n_bins   = opt.nbins
 
 paths_pkl = {
     "2024": "/eos/user/a/apuglia/TROTA/TROTA2024/pkls/training_dataset_1_pt_cut_600_reduced.pkl",
-    "2022":  "/eos/user/a/apuglia/TROTA/TROTA2022/pkls/training_dataset_1_pt_cut_600_reduced.pkl"}
+    "2022":  "/eos/user/a/apuglia/TROTA/TROTA2022/pkls/training_dataset_1_pt_cut_600_reduced_reduced_reduced.pkl"}
 
 categories =  ["3j1fj", "2j1fj", "3j0fj"]
 
