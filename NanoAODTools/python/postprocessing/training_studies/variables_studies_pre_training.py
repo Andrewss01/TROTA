@@ -294,7 +294,7 @@ n_bins   = opt.nbins
 
 paths_pkl = {
     "2024": "/eos/user/a/apuglia/TROTA/TROTA2024/pkls/training_dataset_1_pt_cut_600_reduced.pkl",
-    "2022":  "/eos/user/a/apuglia/TROTA/TROTA2022/pkls/training_dataset_1_pt_cut_600_reduced_reduced_reduced.pkl"}
+    "2022":  "/eos/user/a/apuglia/TROTA/TROTA2022/pkls/training_dataset_1_pt_cut_600_reduced.pkl"}
 
 categories =  ["3j1fj", "2j1fj", "3j0fj"]
 
