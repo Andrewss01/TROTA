@@ -161,9 +161,9 @@ def check_status_submission(dataset,username, uid, remote_folder_name, redirecto
     job_success = 0
     successJobTag_list = []
     
-    err_folder = os.environ.get('PWD')+ f"/tmp/{dataset}/condor/error"
-    log_folder = os.environ.get('PWD')+ f"/tmp/{dataset}/condor/log"
-    out_folder = os.environ.get('PWD')+ f"/tmp/{dataset}/condor/output"
+    err_folder = os.environ.get('PWD')+ f"/tmp/post_processing/{dataset}/condor/error"
+    log_folder = os.environ.get('PWD')+ f"/tmp/post_processing/{dataset}/condor/log"
+    out_folder = os.environ.get('PWD')+ f"/tmp/post_processing/{dataset}/condor/output"
     
     for file_name, file_size in file_sizes.items():
        
@@ -223,7 +223,7 @@ def check_status_submission(dataset,username, uid, remote_folder_name, redirecto
             file_label = jobTag.split('_')[-1]
            
             print("...REMOVING condor log, err and out ", file_label, end="\r")
-            resubmit_string += f"condor_submit tmp/{dataset}/{file_label}/condor.sub; "
+            resubmit_string += f"condor_submit tmp/post_processing/{dataset}/{file_label}/condor.sub; "
             subprocess.run(f"rm {err_folder}/{dataset}_{file_label}.err",shell=True, capture_output=True, text=True)
             subprocess.run(f"rm {log_folder}/{dataset}_{file_label}.log",shell=True, capture_output=True, text=True)
             subprocess.run(f"rm {out_folder}/{dataset}_{file_label}.out",shell=True, capture_output=True, text=True)
