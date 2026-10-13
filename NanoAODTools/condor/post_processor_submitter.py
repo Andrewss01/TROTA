@@ -16,7 +16,7 @@ parser.add_option('--dryrun', dest='debug', action='store_true', default=False, 
 parser.add_option('-s', '--submit', dest='submit', action='store_true', default=False, help='True if you want to submit jobs')
 parser.add_option('-r', '--resubmit', dest='resubmit', action='store_true', default=False, help='resubmit failed jobs')
 parser.add_option('--status', action='store_true', default=False, help='True if you want to check status of jobs')
-parser.add_option('--folder', dest='folder', default='TROTA_test', help = 'choose the folder name on you tier where the files will be saved')
+parser.add_option('--folder', dest='folder', default='Hotvr_Trota', help = 'choose the folder name on you tier where the files will be saved')
 parser.add_option('--nfiles', dest='nfiles', type=int, default=1, help = 'max number of files to run. If -1 means all')
 parser.add_option('-e', '--evaluate', action = 'store_true', default = False, help='True if you want to evaluate with the training models')
 parser.add_option('--dict_samples',default=None, help='dict_samples for files to select, leave it NONE. Necessary only for tests')
