@@ -44,11 +44,15 @@ def classify_sample(sample_name):
     if "TT_hadr" in sample_name or "TT_semilep" in sample_name or "Tprime" in sample_name:
         return "TT"
     elif "TT_dilep" in sample_name:
-        return "TT_dilep"
+        return "TT"
+    elif "TbarWplus" in sample_name or "TWminus" in sample_name:
+        return "TT"
     elif "QCD" in sample_name:
         return "QCD"
     elif "ZJ" in sample_name:
-        return "ZJets"
+        return "QCD"
+    elif "WJets" in sample_name:
+        return "QCD"
     else:
         return None
 

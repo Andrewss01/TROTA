@@ -69,7 +69,7 @@ def fill_mass(mass_dnn, idx_top, j0, j1, j2, fj):
     #     mass_dnn[idx_top, 4] = variables_cluster[2] 
     return mass_dnn
 
-def fill_fj(fj_dnn, fj, idx_top):
+def fill_fj(fj_dnn, fj, idx_top, year):
     if year==2018: 
         fj_dnn[idx_top, 0]  = fj.area
         fj_dnn[idx_top, 1]  = fj.btagDeepB
@@ -181,7 +181,7 @@ def boost_PFC(pt_top,eta_top,phi_top,M_top,pt_PFC,eta_PFC,phi_PFC,M_PFC):
 
     return pt_new, eta_new, phi_new, mass_new
 
-def fill_PFCs(n_PFCs, PFCs_dnn, PFCs, idx_top, pt_top, eta_top, phi_top, M_top): 
+def fill_PFCs(n_PFCs, PFCs_dnn, PFCs, idx_top, pt_top, eta_top, phi_top, M_top, year): 
     if year==2022:
         for i,particle in enumerate(PFCs):
             if i<n_PFCs: #minore e non minore e uguale perchè parte da 0
@@ -214,7 +214,7 @@ def fill_PFCs(n_PFCs, PFCs_dnn, PFCs, idx_top, pt_top, eta_top, phi_top, M_top):
                 PFCs_dnn[idx_top, i, 8] = particle.IsInFatJet
     return PFCs_dnn
 
-def fill_SVs(n_SVs, SVs_dnn, SVs, idx_top, pt_top, eta_top, phi_top, M_top):
+def fill_SVs(n_SVs, SVs_dnn, SVs, idx_top, pt_top, eta_top, phi_top, M_top, year):
     if year==2022:
         for i, particle in enumerate(SVs):
             if i < n_SVs:
@@ -426,23 +426,26 @@ def process_batch(batch_indexes, inFile, component, categories, n_PFCs, year, pt
 
                         PFC_toappend = fill_PFCs(n_PFCs= n_PFCs, PFCs_dnn = PFC_toappend, 
                                                 PFCs = PFCs, idx_top = 0, pt_top = t.pt, 
-                                                eta_top = t.eta, phi_top = t.phi, M_top = t.mass)
+                                                eta_top = t.eta, phi_top = t.phi, M_top = t.mass, year = year)
 
                     if year == 2022 and sv:
                         SVs_toappend = fill_SVs(n_SVs = n_SVs, SVs_dnn = SVs_toappend, 
                                                 SVs= SVs, idx_top = 0, pt_top = t.pt, 
-                                                eta_top = t.eta, phi_top = t.phi, M_top = t.mass)
+                                                eta_top = t.eta, phi_top = t.phi, M_top = t.mass, year = year )
 
                     if best_top_category == 0:
+                        # print(t.idxFatJet, t.idxJet0, t.idxJet1, t.idxJet2)
+                        # print(len(goodfatjets), len(goodjets))
                         fj = goodfatjets[t.idxFatJet]
 
-                        if (fj.globalParT3_QCD + fj.globalParT3_Xbb) == 0:
-                            continue
+                        if year == 2024:
+                            if (fj.globalParT3_QCD + fj.globalParT3_Xbb) == 0 :
+                                continue
                         j0,j1,j2 = goodjets[t.idxJet0], goodjets[t.idxJet1], goodjets[t.idxJet2]
 
-                        fatjet_toappend = fill_fj(fj_dnn = fatjet_toappend, fj = fj, idx_top = 0)
+                        fatjet_toappend = fill_fj(fj_dnn = fatjet_toappend, fj = fj, idx_top = 0, year = year)
                         jet_toappend = fill_jets(jets_dnn = jet_toappend, j0 = j0, j1=j1, j2=j2, 
-                                                sumjet=(j0.p4()+j1.p4()+j2.p4()), fj_phi = fj.phi, fj_eta= fj.eta, idx_top=0)
+                                                sumjet=(j0.p4()+j1.p4()+j2.p4()), fj_phi = fj.phi, fj_eta= fj.eta, idx_top=0, year = year)
 
                         mass_toappend = fill_mass(mass_dnn = mass_toappend, idx_top = 0, j0 = j0, j1=j1, j2=j2, fj=fj)
 
@@ -452,12 +455,14 @@ def process_batch(batch_indexes, inFile, component, categories, n_PFCs, year, pt
                         event_category_toappend[0] = best_top_category
 
                     elif best_top_category == 1: 
+                        # print( t.idxJet0, t.idxJet1, t.idxJet2)
+                        # print( len(goodjets))
                         fj = ROOT.TLorentzVector()
                         fj.SetPtEtaPhiM(0,0,0,0)
                         j0,j1,j2 = goodjets[t.idxJet0], goodjets[t.idxJet1], goodjets[t.idxJet2]
 
                         jet_toappend = fill_jets(jets_dnn=jet_toappend, j0=j0, j1=j1, j2=j2, sumjet=(j0.p4()+j1.p4()+j2.p4()), 
-                                                fj_phi=fj.Phi(), fj_eta=fj.Eta(), idx_top=0)
+                                                fj_phi=fj.Phi(), fj_eta=fj.Eta(), idx_top=0, year = year)
                         mass_toappend = fill_mass(mass_dnn=mass_toappend, idx_top=0, j0=j0, j1=j1, j2=j2, fj=None)
 
                         if not "QCD" in component: 
@@ -466,15 +471,19 @@ def process_batch(batch_indexes, inFile, component, categories, n_PFCs, year, pt
                         event_category_toappend[0] = best_top_category
 
                     else:
+                        # print(t.idxFatJet, t.idxJet0, t.idxJet1, t.idxJet2)
+                        # print(len(goodfatjets), len(goodjets))
                         fj = goodfatjets[t.idxFatJet]
-                        if (fj.globalParT3_QCD + fj.globalParT3_Xbb) == 0:
-                            continue
+                        
+                        if year == 2024:
+                            if (fj.globalParT3_QCD + fj.globalParT3_Xbb) == 0: 
+                                continue
                         j0,j1 = goodjets[t.idxJet0], goodjets[t.idxJet1]
 
-                        fatjet_toappend = fill_fj(fj_dnn = fatjet_toappend, fj = fj, idx_top = 0)
+                        fatjet_toappend = fill_fj(fj_dnn = fatjet_toappend, fj = fj, idx_top = 0, year = year)
 
                         jet_toappend = fill_jets(jets_dnn=jet_toappend, j0=j0,j1=j1, j2=0, sumjet=(j0.p4() + j1.p4()), 
-                                                fj_phi = fj.phi, fj_eta= fj.eta, idx_top = 0)
+                                                fj_phi = fj.phi, fj_eta= fj.eta, idx_top = 0, year = year)
 
                         mass_toappend = fill_mass(mass_dnn = mass_toappend, idx_top = 0, j0 =j0, j1=j1, j2=None, fj=fj)
 

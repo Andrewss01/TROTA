@@ -21,8 +21,8 @@ ROOT.gStyle.SetOptStat(0)
 # Parse the arguments
 parser = argparse.ArgumentParser()
 parser.add_argument("-a", "--all", dest="all", action="store_true", default=False)
-parser.add_argument("-f", "--folder", dest="folder", default= "/eos/user/a/apuglia/TROTA/TROTA2024/pkls/training_dataset_1_pt_cut_600.pkl")
-parser.add_argument("-o", "--outfolder", dest="outfolder", default="/eos/user/a/apuglia/TROTA/TROTA2024/pkls")
+parser.add_argument("-f", "--folder", dest="folder", default= "/eos/user/a/apuglia/TROTA/TROTA2022/pkls/training_dataset_1_pt_cut_600.pkl")
+parser.add_argument("-o", "--outfolder", dest="outfolder", default="/eos/user/a/apuglia/TROTA/TROTA2022/pkls")
 args   = parser.parse_args()
 all    = args.all
 folder = args.folder
@@ -98,7 +98,7 @@ else:
 
             if len(idx_truetop) == 0:
                 print('NO TRUE TOPS')
-                idx_todrop = random.sample(idx_falsetop, int(len(idx_falsetop)*(0.9)))
+                idx_todrop = random.sample(idx_falsetop, int(len(idx_falsetop)*(0.8)))
                 #0.7 per trota2022 0.8 per trota2024
 
             elif len(idx_falsetop)>2*len(idx_truetop):

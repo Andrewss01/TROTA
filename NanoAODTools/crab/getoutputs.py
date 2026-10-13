@@ -13,7 +13,7 @@ import uproot
 usage = 'python3 getoutputs.py -d dataset_name'
 parser = optparse.OptionParser(usage)
 parser.add_option('-d', '--dat', dest='dat', type=str, default = '', help='Please enter a dataset name')
-parser.add_option('-o', '--output', dest='output', type=str, default = 'dict_samples_2024.json', help='Please enter a json output file')
+parser.add_option('-o', '--output', dest='output', type=str, default = 'dict_samples_hotvr_2024.json', help='Please enter a json output file')
 parser.add_option('-v', '--verbose', dest='verbose', action='store_true', default=False, help='Enable verbose output')
 parser.add_option('--tier', dest='tier', type=str, default = 'bari', help='Please enter location where to write the output file (tier pisa or bari)')
 (opt, args) = parser.parse_args()
@@ -43,7 +43,7 @@ os.popen("cp /tmp/x509up_u" + str(uid) + " /afs/cern.ch/user/" + inituser + "/" 
 
 # insert here the name of output folder
 running_folder                      = os.environ.get('PWD') #+ "/tmp/"
-remote_folder_name                  = "TROTA2024/Eval_samples"
+remote_folder_name                  = "HOTVR_files"
  
 def get_files_on_tier(folder, cert_path, ca_path):
     try:

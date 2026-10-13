@@ -9,16 +9,16 @@ import subprocess
 from PhysicsTools.NanoAODTools.postprocessing.samples.samples import *
 
 
-def find_folder(redirector, username, remote_dir, dataset_label, cert_path, ca_path):
-    results = subprocess.run([
-        'davix-ls', '-E', cert_path, '--capath', ca_path, redirector+"/store/user/"+username+"/"+remote_dir+"/"+dataset_label+"/"
-    ], capture_output=True, text=True, check=True)
-    subfold = results.stdout.splitlines()
-    subfold.sort()
-    subfold = subfold[-1]
-    #-1 per i Tprime 0 per gli altri perchè sono quelli senza sistematiche
+# def find_folder(redirector, username, remote_dir, dataset_label, cert_path, ca_path):
+#     results = subprocess.run([
+#         'davix-ls', '-E', cert_path, '--capath', ca_path, redirector+"/store/user/"+username+"/"+remote_dir+"/"+dataset_label+"/"
+#     ], capture_output=True, text=True, check=True)
+#     subfold = results.stdout.splitlines()
+#     subfold.sort()
+#     subfold = subfold[-1]
+#     #-1 per i Tprime 0 per gli altri perchè sono quelli senza sistematiche
 
-    return remote_dir+"/"+dataset_label+"/"+subfold
+#     return remote_dir+"/"+dataset_label+"/"+subfold
 
 username = str(os.environ.get('USER'))
 inituser = str(os.environ.get('USER')[0])
@@ -27,14 +27,14 @@ inituser = str(os.environ.get('USER')[0])
 usage = 'python3 creating_pkls_submitter.py -d inFile'
 parser = optparse.OptionParser(usage)
 parser.add_option('-d'   , '--dataset'   , dest='dataset'  , type=str   , default=None ,   help ='dataset to run '         )
-parser.add_option('-j'   , '--json'      , dest='json'     , type=str   , default='../python/postprocessing/samples/dict_samples_trainings_2024.json' )
+parser.add_option('-j'   , '--json'      , dest='json'     , type=str   , default='../python/postprocessing/samples/dict_samples_trainings_2022.json' )
 parser.add_option('-n'  , '--nevents'   , dest='nevents'  , type=int   , default=-1   ,   help='number of events to run, -1 means all events'  )
 parser.add_option('--tier', dest='tier', type=str, default = 'bari', help='Please enter location where to write the output file (tier pisa or bari)')
-parser.add_option( '--path_pkl' , dest='path_pkl' , type=str   , default="/eos/user/a/apuglia/TROTA/TROTA2024/pkls" ,   help='path to save pkl file'    )
+parser.add_option( '--path_pkl' , dest='path_pkl' , type=str   , default="/eos/user/a/apuglia/TROTA/TROTA2022/pkls" ,   help='path to save pkl file'    )
 parser.add_option( '--num_pfcs'  , dest='numpfcs'  , type=int   , default=20   ,   help='number of particles used for training, default 20')
 parser.add_option( '--pt_cut'    , dest='pt_cut'   , type=float , default= 600   ,   help='pt cut for particles used for training')
 parser.add_option('-v'   , '--verbose'   , dest='verbose'  , action='store_true'       , default=False  ,  help='if True do verbose')
-parser.add_option('-t', '--tier_folder', dest='tier_folder', type=str, default='TROTA2024/Training_samples', help='folder on the tier with the samples')
+# parser.add_option('-t', '--tier_folder', dest='tier_folder', type=str, default='TROTA2024/Training_samples', help='folder on the tier with the samples')
 parser.add_option('--pfc', dest='pfc', action = 'store_true', default = False)
 parser.add_option('--sv', dest='sv', action ='store_true', default = False)
 parser.add_option('-s', dest='start', default = 0, type = int)
@@ -49,16 +49,16 @@ pt_cut      = opt.pt_cut
 verbose     = opt.verbose
 tier        = opt.tier
 path_pkl    = opt.path_pkl
-tier_folder = opt.tier_folder
+# tier_folder = opt.tier_folder
 pfc         = opt.pfc
 sv          = opt.sv
 json_file   = opt.json
 start_file  = opt.start
 
 
-sig, bkg = ["TT", "Tprime", "TW"],["QCD", "ZJets", "WJets"]
+sig, bkg = ["TT", "Tprime", "TW","TbarW"],["QCD", "ZJets", "WJets"]
 if any(x in dataset for x in sig):
-    n_files =1 
+    n_files =2
 elif any(x in dataset for x in bkg):
     n_files = 1 
 else:
@@ -108,7 +108,7 @@ with open(json_file, "rb") as sample_file:
     json_samples = json.load(sample_file)
 
 
-def sub_writer(folder = './', label = None):
+def sub_writer(folder = './', label = None, sample = None):
     f = open(folder + label+"/condor.sub","w")
     f.write('Proxy_filename          = x509up\n')
     f.write('Proxy_path              = /afs/cern.ch/user/' + inituser + "/" + username + "/private/$(Proxy_filename)\n")
@@ -119,7 +119,9 @@ def sub_writer(folder = './', label = None):
     f.write("when_to_transfer_output = ON_EXIT\n")
     f.write("transfer_input_files    = $(Proxy_path)\n")
     f.write('request_memory          = 30000\n')
-    f.write("+JobFlavour             = \"nextweek\"\n") # options are espresso = 20 minutes, microcentury = 1 hour, longlunch = 2 hours, workday = 8 hours, tomorrow = 1 day, testmatch = 3 days, nextweek     = 1 week
+    f.write("+JobFlavour             = \"nextweek\"\n") 
+    f.write('+JobTag                 = "'+sample+'_'+label+'"\n')
+    # options are espresso = 20 minutes, microcentury = 1 hour, longlunch = 2 hours, workday = 8 hours, tomorrow = 1 day, testmatch = 3 days, nextweek     = 1 week
     # f.write("initialdir              = " + folder + "\n")
     f.write("executable              = " + folder+label+"/runner.sh\n")
     f.write("arguments               = \n")
@@ -152,14 +154,13 @@ def runner_writer(folder, label, path_file, component, path_to_pkl, year, n_even
 
 for sample in samples: 
     sample_label = sample.label
-    sample_year  = sample.year 
+    sample_year  = sample.year
     dataset_label = sample_dict[dataset].label
 
 
   
     condor_folder = os.environ.get('PWD') +"/tmp/creating_pkls/" + sample_label +"/"
-    # if tier_folder == "Run3Analysis_Tprime":
-    folder_tier = find_folder(redirector, username, tier_folder, sample_label, "/tmp/x509up_u"+str(uid), "/cvmfs/cms.cern.ch/grid/etc/grid-security/certificates/")
+    # folder_tier = find_folder(redirector, username, tier_folder, sample_label, "/tmp/x509up_u"+str(uid), "/cvmfs/cms.cern.ch/grid/etc/grid-security/certificates/")
     
     if not os.path.exists(condor_folder):
         os.makedirs(condor_folder)
@@ -170,16 +171,13 @@ for sample in samples:
     if not os.path.exists(condor_folder + "condor/log"):
         os.makedirs(condor_folder+"condor/log")
 
-    # path_pkl =  +"/" + sample_label + "/"
     path_pkl_dir = path_pkl+ "/" +sample_label+"/"
 
     if not os.path.exists(path_pkl_dir):
         os.makedirs(path_pkl_dir)
     
     for idx in range(start_file, end_file): 
-        # if tier_folder == "Run3Analysis_Tprime":
         path_file = json_samples[dataset_label][sample_label]["strings"][idx]
-        # path_file = redirector + "/store/user/" + username +"/"+folder_tier+"/tree_hadd_"+str(idx)+".root"
         print('processing file: ', path_file)
         
         component = sample_label[:-4] + str(idx)
@@ -188,7 +186,7 @@ for sample in samples:
         if not os.path.exists(condor_folder + "/file_"+str(idx)): 
             os.makedirs(condor_folder+"/file_"+str(idx))
         path_pkl_file = path_pkl_dir+ component
-        sub_writer(folder=condor_folder, label = 'file_'+str(idx))
+        sub_writer(folder=condor_folder, label = 'file_'+str(idx), sample = sample_label)
         runner_writer(folder=condor_folder,label = 'file_'+str(idx), path_file=path_file, component=component, path_to_pkl = path_pkl_file, year =sample_year, num_pfc = n_PFCs, n_events = n_events, verbose = verbose, pt_cut = pt_cut)
         
         print('path to pkl is: ', path_pkl_file)

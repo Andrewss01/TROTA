@@ -471,8 +471,8 @@ if verbose:
 
 trainer1 = trainer(*data)
 trainer1.split(test_size= 0.3)
-trainer1.tune_hps(project_name= '../TROTA'+year+'/tuning/grid_search_trota_resolved_'+label, max_epochs= 200, batch_size= 200)
-trainer1.training(validation_split= 0.3, epochs = 200, batch_size= 1024)
+trainer1.tune_hps(project_name= '../TROTA'+year+'/tuning/grid_search_trota_resolved_'+label, max_epochs= 200, batch_size= 512)
+trainer1.training(validation_split= 0.3, epochs = 100, batch_size= 1024)
 best_hyperparams  = trainer1.best_hps
 print(f"BEST HPS FOUND:\n{best_hyperparams}")
 best_hps_path = path_outJson.replace('scores', 'best_hps')

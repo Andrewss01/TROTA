@@ -226,7 +226,7 @@ class trainer:
         if not hasattr(self, 'X_jet_train'):
             self.split(test_size  = 0.3)
         objective = kt.Objective('val_accuracy', direction = 'max')
-        tuner = kt.Hyperband(self.model_builder_tuning, objective = objective, factor = factor, project_name = project_name)
+        tuner = kt.Hyperband(self.model_builder_tuning, objective = objective, factor = factor, project_name = project_name, overwrite=True)
         tuner.search_space_summary()
         self.callbacks()
 
@@ -454,13 +454,13 @@ if verbose:
 
 trainer1 = trainer(*data)
 trainer1.split(test_size= 0.3)
-# trainer1.tune_hps(project_name= '../TROTA'+year+'/tuning/grid_search_trota_mixed_'+label, max_epochs= 200, batch_size= 250)
-best_hps_path_recovery = '../TROTA'+year+'/tuning/grid_search_trota_mixed_'+label+'/best_hps_recovered.json'
-with open(best_hps_path_recovery) as f:
-    trainer1.best_hps = json.load(f)
-print("Best hps recuperati manualmente:", trainer1.best_hps)
+trainer1.tune_hps(project_name= '../TROTA'+year+'/tuning/grid_search_trota_mixed_'+label, max_epochs= 200, batch_size= 200)
+# best_hps_path_recovery = '../TROTA'+year+'/tuning/grid_search_trota_mixed_'+label+'/best_hps_recovered.json'
+# with open(best_hps_path_recovery) as f:
+#     trainer1.best_hps = json.load(f)
+# print("Best hps recuperati manualmente:", trainer1.best_hps)
 
-trainer1.training(validation_split= 0.3, epochs = 200, batch_size= 250)
+trainer1.training(validation_split= 0.3, epochs = 200, batch_size= 1024)
 best_hyperparams  = trainer1.best_hps
 print(f"BEST HPS FOUND:\n{best_hyperparams}")
 best_hps_path = path_outJson.replace('scores', 'best_hps')
