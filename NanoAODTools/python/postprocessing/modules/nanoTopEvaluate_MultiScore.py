@@ -54,7 +54,7 @@ def fill_fj(fj_dnn, fj, idx_top, year):
         fj_dnn[idx_top, 1]  = fj.btagDeepB
         fj_dnn[idx_top, 2]  = fj.particleNetWithMass_QCD
         fj_dnn[idx_top, 3]  = fj.particleNetWithMass_TvsQCD
-        fj_dnn[idx_top, 4]  = fj.particleNetwithMass_WvsQCD
+        fj_dnn[idx_top, 4]  = fj.particleNetWithMass_WvsQCD
         # fj_dnn[idx_top, 5]  = fj.particleNetWithMass_QCD 
         # fj_dnn[idx_top, 6]  = fj.particleNet_XbbVsQCD
         # fj_dnn[idx_top, 7]  = fj.particleNet_XqqVsQCD
