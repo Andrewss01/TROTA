@@ -13,6 +13,7 @@ cmsenv
 ## Evaluate samples with TROTA scores
 Four training are avaible on the repository: two for 2024 samples (Top Mixed and Top Resolved) and two for 2022 samples  (Top Mixed and Top Resolved). They use nanoaodsim samples that are listed in NanoAODTools/python/postprocessing/samples/samples.py
 
+**Important note: post processor submitter.py is updated to work only on MC, it has to be adapted for Data samples if needed**
 Samples are evaluated using a postprocessor script using condor. Then, all the samples are saved on tier 
 ```bash
 cd CMSSW_X_Y_Z/src/PhysicsTools/NanoAODTools/condor/
